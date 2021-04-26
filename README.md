@@ -1,5 +1,6 @@
 # iDaaS KIC
-KIC - Knowledge, Insight and Conformance - designed to be a platform that maintains all activity that occurs with the iDaaS Components
+KIC - Knowledge, Insight and Conformance - designed to be a platform that maintains all activity that occurs with the iDaaS Components.
+This is the upstream for RedHat Healthcare's <a href="https://github.com/RedHat-Healthcare/iDaaS-KIC" target="_blank">iDaaS KIC</a>.<br/>
 
 # iDAAS-KIC (Knowledge, Insight and Conformance)
 iDAAS DataHub platform is intended for persisting of data needed within the iDAAS. The current main usage is
