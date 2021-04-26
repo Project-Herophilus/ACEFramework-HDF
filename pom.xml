@@ -6,8 +6,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.connectedhealth_idaas.kic</groupId>
-    <artifactId>idaas-connect-fhir</artifactId>
-    <version>2020.03</version>
+    <artifactId>idaas-connect-kic</artifactId>
+    <version>2020.04</version>
     <name>iDAAS Connect - KIC </name>
 
     <properties>
