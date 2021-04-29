@@ -13,7 +13,7 @@
  *  implied.  See the License for the specific language governing
  *  permissions and limitations under the License.
  */
-package com.redhat.idaas.datahub;
+package io.connectedhealth_idaas.kic;
 
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.RouteDefinition;
@@ -28,7 +28,6 @@ import org.apache.camel.component.kafka.KafkaEndpoint;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringJoiner;
 
 @Component
 public class CamelConfiguration extends RouteBuilder {
@@ -56,14 +55,13 @@ public class CamelConfiguration extends RouteBuilder {
             .removeHeader("breadcrumbId").convertBodyTo(String.class)
             .process("auditProcessor");
 
+    // Output to configured RDBMS ONLY is isStoreinDb = true
     if (config.isStoreInDb()) {
       route.multicast().parallelProcessing().to("direct:file", "direct:db");
-
       RouteDefinition from = from("direct:db");
-
       String columns = String.join(",", AuditMessage.DB_PERSISTABLE_FIELDS);
       List<String> namedParams = new ArrayList<>();
-      for (String namedParam: AuditMessage.DB_PERSISTABLE_FIELDS) {
+      for (String namedParam : AuditMessage.DB_PERSISTABLE_FIELDS) {
         namedParams.add(":?" + namedParam);
         from = from.setHeader(namedParam, simple("${body." + namedParam + "}"));
       }
@@ -74,9 +72,12 @@ public class CamelConfiguration extends RouteBuilder {
     } else {
       route.to("direct:file");
     }
+    //  Output JSON Documents ONLY is isStoreinFS = true
+    if (config.isStoreInFs()) {
+      from("direct:file").marshal().json(JsonLibrary.Jackson)
+              .to("file:" + config.getAuditDir());
+    }
 
-    from("direct:file").marshal().json(JsonLibrary.Jackson)
-            .to("file:" + config.getAuditDir());
+
   }
-
 }

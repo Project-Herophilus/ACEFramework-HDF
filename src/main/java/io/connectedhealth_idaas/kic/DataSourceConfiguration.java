@@ -1,4 +1,4 @@
-package com.redhat.idaas.datahub;
+package io.connectedhealth_idaas.kic;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

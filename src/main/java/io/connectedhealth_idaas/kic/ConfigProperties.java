@@ -13,7 +13,7 @@
  *  implied.  See the License for the specific language governing
  *  permissions and limitations under the License.
  */
-package com.redhat.idaas.datahub;
+package io.connectedhealth_idaas.kic;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -22,10 +22,9 @@ public class ConfigProperties {
 
     private String kafkaBrokers;
     private String kafkaTopicName;
-
     private String auditDir;
-
     private Boolean storeInDb;
+    private Boolean storeInFs;
     private String dbDriverClassName;
     private String dbUrl;
     private String dbUsername;
@@ -74,6 +73,16 @@ public class ConfigProperties {
 
     public Boolean getStoreInDb() {
         return storeInDb;
+    }
+
+    public boolean isStoreInFs() { return storeInFs; }
+
+    public void setStoreInFs(boolean storeInFs) {
+        this.storeInFs = storeInFs;
+    }
+
+    public Boolean getStoreInFs() {
+        return storeInFs;
     }
 
     public boolean isCreateDbTable() {
@@ -127,4 +136,5 @@ public class ConfigProperties {
     public void setDbTableName(String dbTableName) {
         this.dbTableName = dbTableName;
     }
+
 }
