@@ -6,14 +6,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.connectedhealth_idaas.kic</groupId>
-    <artifactId>idaas-connect-kic</artifactId>
-    <version>2020.04</version>
-    <name>iDAAS Connect - KIC</name>
+    <artifactId>idaas-connect-fhir</artifactId>
+    <version>2020.03</version>
+    <name>iDAAS Connect - KIC </name>
 
     <properties>
         <spring.version>3.2.4.RELEASE</spring.version>
         <spring.boot.version>2.3.7.RELEASE</spring.boot.version>
-        <camel.version>3.9.0</camel.version>
+        <camel.version>3.7.3</camel.version>
     </properties>
 
     <dependencies>
