@@ -1,3 +1,6 @@
+We are currently working thtough some issues with errors preventing Camel from running as a SpringBoot application. The community is working on it and we apologize for the inconvenience. Please feel free to look at https://github.com/RedHat-Healthcare/iDaaS-Connect. This solution upstream continues to run.
+
+
 # iDaaS KIC
 KIC - Knowledge, Insight and Conformance - designed to be a platform that maintains all activity that occurs with the iDaaS Components.
 This is the upstream for RedHat Healthcare's <a href="https://github.com/RedHat-Healthcare/iDaaS-KIC" target="_blank">iDaaS KIC</a>.<br/>
@@ -100,19 +103,46 @@ It is possible to overwrite configuration by:
 
 Supported properties include:
 ```properties
-server.port=8080
+#logging.config=classpath:logback.xml
 
-idaas.kafkaBrokers=localhost:9092 #a comma separated list of kafka brokers e.g. host1:port1,host2:port2
+# the options from org.apache.camel.spring.boot.CamelConfigurationProperties can be configured here
+camel.springboot.name=iDaaS-KIC
+# lets listen on all ports to ensure we can be invoked from the pod IP
+server.address=0.0.0.0
+management.address=0.0.0.0
+# lets use a different management port in case you need to listen to HTTP requests on 8080
+management.port=8081
+# Server - Internal
+server.port=9970
+# disable all management enpoints except health
+endpoints.enabled = false
+endpoints.health.enabled = true
+spring.main.web-application-type=none
+camel.springboot.main-run-controller=true
+
+# Kafka Details
+idaas.kafkaBrokers=localhost:9092
 idaas.kafkaTopicName=opsmgmt_platformtransactions
+# Audit Directory Location
+idaas.storeInFs=true
 idaas.auditDir=audit
-
-idaas.storeInDb=false
-idass.dbDriverClassName=org.postgresql.Driver
-idaas.dbUrl=jdbc:postgresql://localhost:5432/audit_db
-idaas.dbUsername=postgres
-idass.dbPassword=Postgres123
-ioaas.dbTableName=audit
+# Relational Database Detail
+idaas.storeInDb=true
+# Setting the createDbTable=true will try to autocreate a table
+# code is located in DataSourceConfiguration.java
 idaas.createDbTable=false
+# Postgres
+#idaas.dbDriverClassName=org.postgresql.Driver
+#idaas.dbUrl=jdbc:postgresql://localhost:5432/idaas_kic
+#idaas.dbPassword=Developer123
+#idaas.dbUsername=postgres
+#idaas.dbTableName=insight
+# MySQL
+idaas.dbDriverClassName=com.mysql.cj.jdbc.Driver
+idaas.dbUrl=jdbc:mysql://localhost:3306/kic?useLegacyDatetimeCode=false&serverTimezone=GMT
+idaas.dbPassword=Developer123
+idaas.dbUsername=root
+idaas.dbTableName=insight
 ```
 Alternatively, if you have a running instance of Kafka, you can start a solution with:
 `./platform-scripts/start-solution-with-external-kafka.sh --idaas.kafkaBrokers=host1:port1,host2:port2`.
