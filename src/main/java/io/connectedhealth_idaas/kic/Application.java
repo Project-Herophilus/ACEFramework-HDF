@@ -14,7 +14,7 @@
  *  permissions and limitations under the License.
  */
 
-package com.redhat.idaas.datahub;
+package io.connectedhealth_idaas.kic;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
