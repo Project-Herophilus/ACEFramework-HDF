@@ -1,0 +1,20 @@
+//
+// Rating
+//
+
+.vue-star-rating {
+  display: inline-block !important
+}
+
+.symbol {
+  border-color: $card-bg;
+}
+
+.rating-symbol-background,
+.rating-symbol-foreground {
+  font-size: 24px;
+}
+
+.rating-symbol-foreground {
+  top: 0px;
+}

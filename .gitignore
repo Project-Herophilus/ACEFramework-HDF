@@ -106,28 +106,28 @@ local.properties
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
 # User-specific stuff:
-.idea/workspace.xml
-.idea/tasks.xml
-.idea/dictionaries
-.idea/vcs.xml
-.idea/jsLibraryMappings.xml
+iDaaS-KIC-Integration/.idea/workspace.xml
+iDaaS-KIC-Integration/.idea/tasks.xml
+iDaaS-KIC-Integration/.idea/dictionaries
+iDaaS-KIC-Integration/.idea/vcs.xml
+iDaaS-KIC-Integration/.idea/jsLibraryMappings.xml
 
 # Sensitive or high-churn files:
-.idea/dataSources.ids
-.idea/dataSources.xml
-.idea/dataSources.local.xml
-.idea/sqlDataSources.xml
-.idea/dynamic.xml
-.idea/uiDesigner.xml
+iDaaS-KIC-Integration/.idea/dataSources.ids
+iDaaS-KIC-Integration/.idea/dataSources.xml
+iDaaS-KIC-Integration/.idea/dataSources.local.xml
+iDaaS-KIC-Integration/.idea/sqlDataSources.xml
+iDaaS-KIC-Integration/.idea/dynamic.xml
+iDaaS-KIC-Integration/.idea/uiDesigner.xml
 # IntelliJ local project file
 *.iml
 
 # Gradle:
-.idea/gradle.xml
-.idea/libraries
+iDaaS-KIC-Integration/.idea/gradle.xml
+iDaaS-KIC-Integration/.idea/libraries
 
 # Mongo Explorer plugin:
-.idea/mongoSettings.xml
+iDaaS-KIC-Integration/.idea/mongoSettings.xml
 
 ## File-based project format:
 *.iws
