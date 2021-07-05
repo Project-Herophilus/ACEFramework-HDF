@@ -22,6 +22,7 @@ public class ConfigProperties {
 
     private String kafkaBrokers;
     private String kafkaTopicName;
+    private String kafkaAppTopicName;
     private String auditDir;
     private Boolean storeInDb;
     private Boolean storeInFs;
@@ -32,67 +33,55 @@ public class ConfigProperties {
     private String dbTableName;
     private Boolean createDbTable;
 
+    //Method for external invocation of Processors as needed
+    String getKafkaTopicUri(String topic) {
+        ConfigProperties config;
+        return "kafka:" + topic + "?brokers=" +
+                getKafkaBrokers();
+    }
+
+
+    // Kafka
     public String getKafkaBrokers() {
         return kafkaBrokers;
     }
-
     public void setKafkaBrokers(String kafkaBrokers) {
         this.kafkaBrokers = kafkaBrokers;
     }
 
+    // Kafka Topics
     public String getKafkaTopicName() {
         return kafkaTopicName;
     }
-
     public void setKafkaTopicName(String kafkaTopicName) {
         this.kafkaTopicName = kafkaTopicName;
     }
 
-    public String getKafkaTopicUri() {
-        String kafkaURI;
-        kafkaURI = "kafka:" + getKafkaTopicName() +
-                "?brokers=" + getKafkaBrokers();
-        return kafkaURI;
-    }
-
+   //Audit Dir
     public String getAuditDir() {
         return auditDir;
     }
-
     public void setAuditDir(String auditDir) {
         this.auditDir = auditDir;
     }
 
+    // Database
     public boolean isStoreInDb() {
         return storeInDb != null && storeInDb;
     }
-
     public void setStoreInDb(Boolean storeInDb) {
         this.storeInDb = storeInDb;
     }
-
     public Boolean getStoreInDb() {
         return storeInDb;
-    }
-
-    public boolean isStoreInFs() { return storeInFs; }
-
-    public void setStoreInFs(boolean storeInFs) {
-        this.storeInFs = storeInFs;
-    }
-
-    public Boolean getStoreInFs() {
-        return storeInFs;
     }
 
     public boolean isCreateDbTable() {
         return createDbTable != null && createDbTable;
     }
-
     public Boolean getCreateDbTable() {
         return createDbTable;
     }
-
     public void setCreateDbTable(Boolean createDbTable) {
         this.createDbTable = createDbTable;
     }
@@ -100,7 +89,6 @@ public class ConfigProperties {
     public String getDbUrl() {
         return dbUrl;
     }
-
     public void setDbUrl(String dbUrl) {
         this.dbUrl = dbUrl;
     }
@@ -108,7 +96,6 @@ public class ConfigProperties {
     public String getDbUsername() {
         return dbUsername;
     }
-
     public void setDbUsername(String dbUsername) {
         this.dbUsername = dbUsername;
     }
@@ -116,7 +103,6 @@ public class ConfigProperties {
     public String getDbPassword() {
         return dbPassword;
     }
-
     public void setDbPassword(String dbPassword) {
         this.dbPassword = dbPassword;
     }
@@ -124,7 +110,6 @@ public class ConfigProperties {
     public String getDbDriverClassName() {
         return dbDriverClassName;
     }
-
     public void setDbDriverClassName(String dbDriverClassName) {
         this.dbDriverClassName = dbDriverClassName;
     }
@@ -132,9 +117,20 @@ public class ConfigProperties {
     public String getDbTableName() {
         return dbTableName;
     }
-
     public void setDbTableName(String dbTableName) {
         this.dbTableName = dbTableName;
     }
+
+    // FS - FileSystem
+    public boolean isStoreInFs() { return storeInFs; }
+    public void setStoreInFs(boolean storeInFs) {
+        this.storeInFs = storeInFs;
+    }
+    public Boolean getStoreInFs() {
+        return storeInFs;
+    }
+
+
+
 
 }

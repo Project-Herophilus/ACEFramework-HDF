@@ -38,7 +38,12 @@ public class AuditProducer {
     @Autowired
     private ConfigProperties config;
 
+    private String getKafkaTopicUri(String topic) {
+        return "kafka:" + topic + "?brokers=" +
+                config.getKafkaBrokers();
+    }
+
     public void sendMessageWithHeaders(String message, Map<String, Object> headers) {
-        producerTemplate.sendBodyAndHeaders(config.getKafkaTopicUri(), message, headers);
+        producerTemplate.sendBodyAndHeaders(config.getKafkaTopicUri(config.getKafkaTopicName()), message, headers);
     }
 }

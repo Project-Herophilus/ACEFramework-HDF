@@ -49,34 +49,38 @@ public class CamelConfiguration extends RouteBuilder {
     return kafka;
   }
 
+  private String getKafkaTopicUri(String topic) {
+        return "kafka:" + topic + "?brokers=" +
+                config.getKafkaBrokers();
+  }
+
   @Override
-  public void configure() {
-    RouteDefinition route = from(config.getKafkaTopicUri())
-            .removeHeader("breadcrumbId").convertBodyTo(String.class)
-            .process("auditProcessor");
+  public void configure() throws Exception{
 
-    // Output to configured RDBMS ONLY is isStoreinDb = true
-    if (config.isStoreInDb()) {
-      route.multicast().parallelProcessing().to("direct:file", "direct:db");
-      RouteDefinition from = from("direct:db");
-      String columns = String.join(",", AuditMessage.DB_PERSISTABLE_FIELDS);
-      List<String> namedParams = new ArrayList<>();
-      for (String namedParam : AuditMessage.DB_PERSISTABLE_FIELDS) {
-        namedParams.add(":?" + namedParam);
-        from = from.setHeader(namedParam, simple("${body." + namedParam + "}"));
-      }
-      String params = String.join(",", namedParams);
-
-      from.setBody(simple("INSERT INTO " + config.getDbTableName() + " (" + columns + ") VALUES (" + params + ")"))
+    RouteDefinition route = from(getKafkaTopicUri(config.getKafkaTopicName()))
+        .removeHeader("breadcrumbId").convertBodyTo(String.class)
+        .process("auditProcessor");
+        // Output to configured RDBMS ONLY is isStoreinDb = true
+        if (config.isStoreInDb()) {
+            route.multicast().parallelProcessing().to("direct:file", "direct:db");
+            RouteDefinition from = from("direct:db");
+            String columns = String.join(",", AuditMessage.DB_PERSISTABLE_FIELDS);
+            List<String> namedParams = new ArrayList<>();
+            for (String namedParam : AuditMessage.DB_PERSISTABLE_FIELDS) {
+              namedParams.add(":?" + namedParam);
+              from = from.setHeader(namedParam, simple("${body." + namedParam + "}"));
+            }
+            String params = String.join(",", namedParams);
+            from.setBody(simple("INSERT INTO " + config.getDbTableName() + " (" + columns + ") VALUES (" + params + ")"))
               .to("jdbc:dataSource?useHeadersAsParameters=true");
-    } else {
-      route.to("direct:file");
-    }
-    //  Output JSON Documents ONLY is isStoreinFS = true
-    if (config.isStoreInFs()) {
-      from("direct:file").marshal().json(JsonLibrary.Jackson)
-              .to("file:" + config.getAuditDir());
-    }
+            } else {
+              route.to("direct:file");
+            }
+        //  Output JSON Documents ONLY is isStoreinFS = true
+        if (config.isStoreInFs()) {
+            from("direct:file").marshal().json(JsonLibrary.Jackson)
+            .to("file:" + config.getAuditDir());
+        }
 
 
   }
