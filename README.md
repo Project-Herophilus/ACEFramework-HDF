@@ -1,12 +1,9 @@
 We are currently working thtough some issues with errors preventing Camel from running as a SpringBoot application. The community is working on it and we apologize for the inconvenience. Please feel free to look at https://github.com/RedHat-Healthcare/iDaaS-Connect. This solution upstream continues to run.
 
 
-# iDaaS KIC
-KIC - Knowledge, Insight and Conformance - designed to be a platform that maintains all activity that occurs with the iDaaS Components.
-This is the upstream for RedHat Healthcare's <a href="https://github.com/RedHat-Healthcare/iDaaS-KIC" target="_blank">iDaaS KIC</a>.<br/>
-
 # iDAAS-KIC (Knowledge, Insight and Conformance)
-iDAAS DataHub platform is intended for persisting of data needed within the iDAAS. The current main usage is
+KIC - Knowledge, Insight and Conformance - designed to be a platform that maintains all activity that occurs with the iDaaS Components.
+It is intended for persisting of data needed within the iDAAS. The current main usage is
 for auditing and logging activities.
 
 ## Add-Ons
