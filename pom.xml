@@ -6,6 +6,17 @@
     <artifactId>io.connectedhealth_idaas.kic</artifactId>
     <version>05.01</version>
 
+      <scm>
+      <connection>scm:git:https://github.com/Project-Herophilus/iDaaS-KIC.git</connection>
+      <url>https://github.com/Project-Herophilus/iDaaS-KIC</url>
+      <developerConnection>scm:git:https://github.com/Project-Herophilus/iDaaS-KIC</developerConnection>
+      <tag>v1.0.0</tag>
+    </scm>
+
+     <modules>
+    	<module>iDaaS-Route-DataDist</module>
+    </modules>
+    
     <properties>
         <camel.version>3.9.0</camel.version>
         <springboot.version>2.4.4</springboot.version>
