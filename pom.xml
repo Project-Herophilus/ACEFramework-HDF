@@ -14,7 +14,7 @@
     </scm>
 
      <modules>
-    	<module>iDaaS-Route-DataDist</module>
+    	<module>iDaaS-KIC-Integration</module>
     </modules>
     
     <properties>
