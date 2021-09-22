@@ -4,7 +4,7 @@
     <!--Internal Project Details-->
     <groupId>io.connectedhealth_idaas.kic</groupId>
     <artifactId>idaas_kic</artifactId>
-    <version>06.01</version>
+    <version>05.01_SNAPSHOT</version>
     <packaging>pom</packaging>
     
       <scm>
