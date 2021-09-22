@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <!--Internal Project Details-->
     <groupId>io.connectedhealth_idaas.kic</groupId>
-    <artifactId>io.connectedhealth_idaas.kic</artifactId>
+    <artifactId>idaas_kic</artifactId>
     <version>06.01</version>
     <packaging>pom</packaging>
     
