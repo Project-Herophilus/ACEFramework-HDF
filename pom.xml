@@ -5,7 +5,8 @@
     <groupId>io.connectedhealth_idaas.kic</groupId>
     <artifactId>io.connectedhealth_idaas.kic</artifactId>
     <version>05.01</version>
-
+    <packaging>pom</packaging>
+    
       <scm>
       <connection>scm:git:https://github.com/Project-Herophilus/iDaaS-KIC.git</connection>
       <url>https://github.com/Project-Herophilus/iDaaS-KIC</url>
