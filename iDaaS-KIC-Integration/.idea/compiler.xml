@@ -6,11 +6,13 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="io.connectedhealth_idaas.kic" />
         <module name="iDaaS-KIC" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="iDaaS-KIC" target="14" />
+      <module name="io.connectedhealth_idaas.kic" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
