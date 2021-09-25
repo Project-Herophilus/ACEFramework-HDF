@@ -14,7 +14,7 @@ var connection = mysql.createConnection({
   host     : 'localhost', //mysql database host name
   user     : 'root', //mysql database user name
   password : 'Developer123', //mysql database password
-  database : 'datasynthesis' //mysql database name
+  database : 'kic' //mysql database name
 });
 
 connection.connect(function(err) {
@@ -43,7 +43,7 @@ var server = app.listen(8400,  "0.0.0.0", function () {
 const swaggerOptions = {
     swaggerDefinition: {
         info: {
-            title:'DataSynthesis - Platform Data API',
+            title:'KIC - Platform Data API',
             version:'2.0.0'
         }
     },
@@ -52,26 +52,12 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJSDoc(swaggerOptions);
 app.use('/api-docs',swaggerUI.serve,swaggerUI.setup(swaggerDocs));
 
-
 /*
-*     APIs - Data Existing
+*     APIs - Insight
 */
 
-/**
- * @swagger
- * /dataexisting_ababanking:
- *   get:
- *     description: Get all ABABanks defined
- *   responses:
- *   '200':
- * description: A list of users
- * content:
- * application/json:
- * schema:
- * type: string
- */
 app.get('/dataexisting_ababanking', function (req, res) {
-    connection.query('select * from dataexisting_ababanking where StatusID=1', function (error, results, fields) {
+    connection.query('select * from insight where StatusID=1', function (error, results, fields) {
         if (error) throw error;
         res.end(JSON.stringify(results));
         res.status(200).send();
@@ -86,349 +72,16 @@ app.get('/dataexisting_areacode', function (req, res) {
     });
 });
 
-// rest api to get a area codes by state
-// Example: http://localhost:8400/dataexisting_areacode/CA
-app.get('/dataexisting_areacode/:statecode', function (req, res) {
-    connection.query('select * from dataexisting_areacode where StatusID=1 and StateCode=?', [req.params.statecode], function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-app.get('/dataexisting_companies', function (req, res) {
-    connection.query('select * from dataexisting_companies where StatusID=1', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-app.get('/dataexisting_namefirst/:firstnamechar/:gender', function (req, res) {
-    connection.query('select * from dataexisting_namefirst where StatusID=1 and left(firstname,1)=? and gender=?', [req.params.firstnamechar, req.params.gender], function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-app.get('/dataexisting_namefirst/:firstnamechar', function (req, res) {
-    connection.query('select * from dataexisting_namefirst where StatusID=1 and left(firstname,1)=?', [req.params.firstnamechar], function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-app.get('/dataexisting_namefirst', function (req, res) {
-    connection.query('select * from dataexisting_namefirst where StatusID=1', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-app.get('/dataexisting_namelast/:lastnamechar', function (req, res) {
-    connection.query('select * from dataexisting_namelast where StatusID=1 and left(lastname,1)=?', [req.params.lastnamechar], function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-app.get('/dataexisting_namelast', function (req, res) {
-    connection.query('select * from dataexisting_namelast where StatusID=1', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-app.get('/dataexisting_upccodes', function (req, res) {
-    connection.query('select * from dataexisting_upccodes where StatusID=1', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-app.get('/dataexisting_zipcodeus/:statecode', function (req, res) {
-    connection.query('select * from dataexisting_zipcodeus where StatusID=1 and State=?', [req.params.statecode], function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-app.get('/dataexisting_zipcodeus', function (req, res) {
-    connection.query('select * from dataexisting_zipcodeus where StatusID=1', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
 /*
- *     Data Generated
- */
-app.get('/datagenerated_accountnumbers', function (req, res) {
-    connection.query('select * from datagenerated_accountnumbers', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-app.get('/datagenerated_addresses', function (req, res) {
-    connection.query('select * from datagenerated_addresses where StatusID=1', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-app.get('/datagenerated_bankaccount', function (req, res) {
-    connection.query('select * from datagenerated_bankaccount where StatusID=1', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-app.get('/datagenerated_creditcard', function (req, res) {
-    connection.query('select * from datagenerated_creditcard where StatusID=1', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-app.get('/datagenerated_dateofbirth', function (req, res) {
-    connection.query('select * from datagenerated_dateofbirth where StatusID=1', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-app.get('/datagenerated_driverslicenses/:statecode', function (req, res) {
-    connection.query('select * from datagenerated_driverslicenses where StatusID=1 and StateCode=?', [req.params.statecode] ,function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-app.get('/datagenerated_driverslicenses', function (req, res) {
-    connection.query('select * from datagenerated_driverslicenses where StatusID=1', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-
-app.get('/datagenerated_ein', function (req, res) {
-    connection.query('select * from datagenerated_ein where StatusID=1', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-app.get('/datagenerated_phonennumber', function (req, res) {
-    connection.query('select * from datagenerated_phonenumber where StatusID=1', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-app.get('/datagenerated_socialsecuritynumber', function (req, res) {
-    connection.query('select * from datagenerated_socialsecuritynumber where StatusID=1', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-app.get('/datagenerated_useridentities', function (req, res) {
-    connection.query('select * from datagenerated_useridentities where StatusID=1', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-/*
-*     Impl Data
-*/
-
-app.get('/applications', function (req, res) {
-    connection.query('select * from impl_application where StatusID=1', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-app.get('/codesetstocrossmaps', function (req, res) {
-    connection.query('select * from impl_codesetstocrossmaps where StatusID=1', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-app.get('/codesetstocrossmaps', function (req, res) {
-    connection.query('select * from impl_codesetstoapplication where StatusID=1', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-app.get('/codesetstocrossmaps', function (req, res) {
-    connection.query('select * from impl_codesettomsgtype where StatusID=1', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-app.get('/legalentity', function (req, res) {
-    connection.query('select * from impl_legalentities where StatusID=1', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-app.get('/organization', function (req, res) {
-    connection.query('select * from impl_organization where StatusID=1', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-app.get('/organization', function (req, res) {
-    connection.query('select * from impl_rulesets where StatusID=1', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-app.get('/organization', function (req, res) {
-    connection.query('select * from impl_rulesetsdefintions where StatusID=1', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-/*
-*     Reference Data
-*/
-
-app.get('/codesets', function (req, res) {
-    connection.query('select * from refdata_codeset where StatusID=1', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-app.get('/countries', function (req, res) {
-    connection.query('select * from refdata_countries where StatusID=1', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-app.get('/datagentypes', function (req, res) {
-    connection.query('select * from refdata_datagentypes where StatusID=1', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-app.get('/industrystd', function (req, res) {
-    connection.query('select * from refdata_industrystd where StatusID=1', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-app.get('/operationtype', function (req, res) {
-    connection.query('select * from refdata_operationtype', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-app.get('/platformparams', function (req, res) {
-    connection.query('select * from refdata_platformparams', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-app.get('/platformparamstodataattributes', function (req, res) {
-    connection.query('select * from refdata_platformparamstodataattributes', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-/*
- * @swagger
- * /sensivityflags:
- *   get:
- *     description: Get all sensitivyflags set
- *     responses:
- *       200:
- *         description: Success
- *
- */
-app.get('/sensitivityflags', function (req, res) {
-    connection.query('select * from refdata_sensitivtyflags where StatusID=1', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-app.get('/statuses', function (req, res) {
-    connection.query('select * from refdata_status where StatusID=1', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-app.get('/terminologystd', function (req, res) {
-    connection.query('select * from refdata_terminologystd where StatusID=1', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-app.get('/timezones', function (req, res) {
-    connection.query('select * from refdata_timezones where StatusID=1', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-app.get('/usstates', function (req, res) {
-    connection.query('select * from refdata_usstates where StatusID=1', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-app.get('/vendors', function (req, res) {
-    connection.query('select * from refdata_vendors where StatusID=1', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-/*
-*     Terms Data
-*/
-
-app.get('/termscodesethl7v2', function (req, res) {
-    connection.query('select * from terms_codeset_HL7v2 where StatusID=1', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
-app.get('/termscodesetumls', function (req, res) {
-    connection.query('select * from terms_umls_mrconoso where StatusID=1', function (error, results, fields) {
-        if (error) throw error;
-        res.end(JSON.stringify(results));
-    });
-});
-
 app.get('/termscodesetumls/:sabcode', function (req, res) {
     connection.query('select * from terms_umls_mrconoso where StatusID=1 and SAB=?', [req.params.sabcode], function (error, results, fields) {
         if (error) throw error;
         res.end(JSON.stringify(results));
     });
 });
+/*
 
+ */
 /*
 *    Base Code Prototyped
 */
