@@ -6,12 +6,6 @@ KIC - Knowledge, Insight and Conformance - designed to be a platform that mainta
 It is intended for persisting of data needed within the iDAAS. The current main usage is
 for auditing and logging activities.
 
-## Add-Ons
-This solution contains three supporting directories. The intent of these artifacts to enable
-resources to work locally: <br/>
-+ platform-scripts: support for some common platform activities. All the scripts are named to describe their capabilities <br/>
-+ platform-datatier: DDL that support this implementation
-
 ## Pre-Requisites
 For all iDaaS design patterns it should be assumed that you will either install as part of this effort, or have the following:
 1. An existing Kafka (or some flavor of it) up and running. Red Hat currently implements AMQ-Streams based on Apache Kafka; however, we
