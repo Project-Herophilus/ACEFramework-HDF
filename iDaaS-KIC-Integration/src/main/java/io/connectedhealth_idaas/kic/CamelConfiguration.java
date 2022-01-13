@@ -69,27 +69,27 @@ public class CamelConfiguration extends RouteBuilder {
   }
 
   @Override
-  public void configure() throws Exception{
+  public void configure() throws Exception {
       // https://tomd.xyz/camel-rest/
       // Rest Configuration
       // Define the implementing component - and accept the default host and port
       restConfiguration().component("servlet")
               .host("0.0.0.0").port(String.valueOf(simple("{{server.port}}")));
 
-        // Endpoints for direct connectivity
-        /*
-        * Transactional Audit
-        *
-        * Direct component within platform to ensure we can centralize logic
-        * There are some values we will need to set within every route
-        * We are doing this to ensure we dont need to build a series of beans
-        * and we keep the processing as lightweight as possible
-        *
-        *   Simple language reference
-        *   https://camel.apache.org/components/latest/languages/simple-language.html
-        *
-        */
-        from("direct:auditing")
+      // Endpoints for direct connectivity
+      /*
+       * Transactional Audit
+       *
+       * Direct component within platform to ensure we can centralize logic
+       * There are some values we will need to set within every route
+       * We are doing this to ensure we dont need to build a series of beans
+       * and we keep the processing as lightweight as possible
+       *
+       *   Simple language reference
+       *   https://camel.apache.org/components/latest/languages/simple-language.html
+       *
+       */
+      from("direct:auditing")
               .routeId("iDaaS-Transactions-KIC")
               .setHeader("messageprocesseddate").simple("${date:now:yyyy-MM-dd}")
               .setHeader("messageprocessedtime").simple("${date:now:HH:mm:ss:SSS}")
@@ -117,7 +117,7 @@ public class CamelConfiguration extends RouteBuilder {
        *   https://camel.apache.org/components/latest/languages/simple-language.html
        *
        */
-        from("direct:transactionauditing")
+      from("direct:transactionauditing")
               .routeId("iDaaS-App-KIC")
               .setHeader("messageprocesseddate").simple("${date:now:yyyy-MM-dd}")
               .setHeader("messageprocessedtime").simple("${date:now:HH:mm:ss:SSS}")
@@ -136,8 +136,11 @@ public class CamelConfiguration extends RouteBuilder {
               .setHeader("transactionCount").exchangeProperty("transactionCount")
               .convertBodyTo(String.class).to(getKafkaTopicUri("opsmgmt_appplatformtransactions"));
 
-
-
+      //Servlet - External Audit Endpoint
+      from("servlet://KIC-Auditing-EndPoint")
+              .routeId("KIC-Auditing-EndPoint")
+              .convertBodyTo(String.class)
+             .wireTap("direct:auditing");
 
       // Get from Defines KafkaTopic for Integration Processing
         RouteDefinition route = from(getKafkaTopicUri(config.getKafkaTopicName()))
