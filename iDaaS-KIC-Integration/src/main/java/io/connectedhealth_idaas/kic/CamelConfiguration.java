@@ -59,7 +59,7 @@ public class CamelConfiguration extends RouteBuilder {
         mapping.setName("CamelServlet");
         mapping.setLoadOnStartup(1);
         mapping.setServlet(new CamelHttpTransportServlet());
-        mapping.addUrlMappings("/projHerophilus/*");
+        mapping.addUrlMappings("/idaas/*");
         return mapping;
     }
 
