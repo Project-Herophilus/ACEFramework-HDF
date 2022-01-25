@@ -34,7 +34,7 @@ public class DataSourceConfiguration {
             String fields = String.join(" VARCHAR(256), ", AuditMessage.DB_PERSISTABLE_FIELDS) + " VARCHAR(256)";
 
             try (Statement statement = dataSource.getConnection().createStatement()) {
-                statement.execute("CREATE TABLE IF NOT EXISTS " + config.getDbTableName() + "(" +
+                statement.execute("CREATE TABLE IF NOT EXISTS " + config.getdbIntegrationTableName() + "(" +
                         fields + ")");
             } catch (SQLException e) {
                 throw new RuntimeException("Failed to create db table", e);

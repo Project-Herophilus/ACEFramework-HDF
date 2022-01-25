@@ -138,11 +138,18 @@ public class CamelConfiguration extends RouteBuilder {
 
       //Servlet - External Audit Endpoint
       from("servlet://KIC-Auditing-EndPoint")
-              .routeId("KIC-Auditing-EndPoint")
+              .routeId("KIC-GenAuditing-EndPoint")
               .convertBodyTo(String.class)
              .wireTap("direct:auditing");
 
-      // Get from Defines KafkaTopic for Integration Processing
+      //Servlet - External Audit Endpoint
+      from("servlet://KIC-ApplicationAuditing-EndPoint")
+              .routeId("KIC-TransactionAuditing-EndPoint")
+              .convertBodyTo(String.class)
+              .wireTap("direct:transactionauditing");
+
+        // Get from Defines KafkaTopic for Integration Processing
+        // General Auditing
         RouteDefinition route = from(getKafkaTopicUri(config.getKafkaTopicName()))
             .removeHeader("breadcrumbId").convertBodyTo(String.class)
             .process("auditProcessor");
@@ -157,7 +164,7 @@ public class CamelConfiguration extends RouteBuilder {
                 from = from.setHeader(namedParam, simple("${body." + namedParam + "}"));
                 }
                 String params = String.join(",", namedParams);
-                from.setBody(simple("INSERT INTO " + config.getDbTableName() + " (" + columns + ") VALUES (" + params + ")"))
+                from.setBody(simple("INSERT INTO " + config.getdbIntegrationTableName() + " (" + columns + ") VALUES (" + params + ")"))
                 .to("jdbc:dataSource?useHeadersAsParameters=true");
                 } else {
                 route.to("direct:file");
@@ -168,7 +175,9 @@ public class CamelConfiguration extends RouteBuilder {
                 .to("file:" + config.getAuditDir());
             }
 
-        // Get from Defintion for App Audit Properties
+        // Application Auditing Processor
+
+
 
   }
 }

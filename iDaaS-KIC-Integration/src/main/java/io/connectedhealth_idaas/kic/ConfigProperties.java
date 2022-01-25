@@ -22,7 +22,7 @@ public class ConfigProperties {
 
     private String kafkaBrokers;
     private String kafkaTopicName;
-    private String kafkaAppTopicName;
+    private String kafkaTopicName_AppAudit;
     private String auditDir;
     private Boolean storeInDb;
     private Boolean storeInFs;
@@ -30,7 +30,8 @@ public class ConfigProperties {
     private String dbUrl;
     private String dbUsername;
     private String dbPassword;
-    private String dbTableName;
+    private String dbIntegrationTableName;
+    private String dbAppTableName;
     private Boolean createDbTable;
 
     //Method for external invocation of Processors as needed
@@ -50,14 +51,22 @@ public class ConfigProperties {
     }
 
     // Kafka Topics
+    // Kafka - Integration
     public String getKafkaTopicName() {
         return kafkaTopicName;
     }
     public void setKafkaTopicName(String kafkaTopicName) {
         this.kafkaTopicName = kafkaTopicName;
     }
+    // Kafka - App
+    public String getkafkaTopicName_AppAudit() {
+        return kafkaTopicName_AppAudit;
+    }
+    public void setkafkaTopicName_AppAudit(String kafkaTopicName_AppAudit) {
+        this.kafkaTopicName_AppAudit = kafkaTopicName_AppAudit;
+    }
 
-   //Audit Dir
+    //Audit Dir
     public String getAuditDir() {
         return auditDir;
     }
@@ -65,13 +74,11 @@ public class ConfigProperties {
         this.auditDir = auditDir;
     }
 
-    // Database
+    // Database Configuration
     public boolean isStoreInDb() {
         return storeInDb != null && storeInDb;
     }
-    public void setStoreInDb(Boolean storeInDb) {
-        this.storeInDb = storeInDb;
-    }
+    public void setStoreInDb(Boolean storeInDb) { this.storeInDb = storeInDb; }
     public Boolean getStoreInDb() {
         return storeInDb;
     }
@@ -114,11 +121,18 @@ public class ConfigProperties {
         this.dbDriverClassName = dbDriverClassName;
     }
 
-    public String getDbTableName() {
-        return dbTableName;
+    // DB Specific Tables
+    // Integration Auditing
+    public String getdbIntegrationTableName() {
+        return dbIntegrationTableName;
     }
-    public void setDbTableName(String dbTableName) {
-        this.dbTableName = dbTableName;
+    public void setdbIntegrationTableName(String dbIntegrationTableName) { this.dbIntegrationTableName = dbIntegrationTableName;
+    }
+    // Application Auditing
+    public String getdbAppTableName() {
+        return dbAppTableName;
+    }
+    public void setdbAppTableName(String dbAppTableName) { this.dbAppTableName = dbAppTableName;
     }
 
     // FS - FileSystem
@@ -129,8 +143,5 @@ public class ConfigProperties {
     public Boolean getStoreInFs() {
         return storeInFs;
     }
-
-
-
 
 }
