@@ -159,7 +159,7 @@ public class CamelConfiguration extends RouteBuilder {
             }
 
         // Application Auditing Processor
-        RouteDefinition route2 = from(getKafkaTopicUri(config.getAppintegrationTopic()))
+        /*RouteDefinition route2 = from(getKafkaTopicUri(config.getAppintegrationTopic()))
               .removeHeader("breadcrumbId").convertBodyTo(String.class)
               .process("auditAppIntegrationProcessor");
         // Output to configured RDBMS ONLY is isStoreinDb = true
@@ -177,12 +177,12 @@ public class CamelConfiguration extends RouteBuilder {
                   .to("jdbc:dataSource?useHeadersAsParameters=true");
         } else {
           route2.to("direct:file");
-        }
+        }*/
       //  Output JSON Documents ONLY is isStoreinFS = true
-      if (config.isStoreInFs()) {
+     /* if (config.isStoreInFs()) {
           from("direct:file").marshal().json(JsonLibrary.Jackson)
                   .to("file:" + config.getAuditDir());
-      }
+      }*/
 
 
   }
