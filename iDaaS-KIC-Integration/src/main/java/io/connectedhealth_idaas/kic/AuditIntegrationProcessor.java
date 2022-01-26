@@ -25,7 +25,7 @@ import java.nio.charset.Charset;
 import java.util.Map;
 
 @Component
-public class AuditProcessor implements Processor {
+public class AuditIntegrationProcessor implements Processor {
 
     private static final Logger log = LoggerFactory.getLogger(CamelConfiguration.class);
 
@@ -47,7 +47,6 @@ public class AuditProcessor implements Processor {
         message.setMessagetrigger(getHeader(headers, "messagetrigger"));
         message.setProcessingtype(getHeader(headers, "processingtype"));
         message.setProcessname(getHeader(headers, "processname"));
-
         exchange.getOut().setBody(message);
     }
 

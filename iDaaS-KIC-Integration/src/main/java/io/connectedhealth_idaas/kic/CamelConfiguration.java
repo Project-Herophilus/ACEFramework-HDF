@@ -76,21 +76,16 @@ public class CamelConfiguration extends RouteBuilder {
       restConfiguration().component("servlet")
               .host("0.0.0.0").port(String.valueOf(simple("{{server.port}}")));
 
-      // Endpoints for direct connectivity
+      // Endpoints for direct auditing processing
+      // Integration Based Auditing
       /*
-       * Transactional Audit
-       *
-       * Direct component within platform to ensure we can centralize logic
-       * There are some values we will need to set within every route
-       * We are doing this to ensure we dont need to build a series of beans
-       * and we keep the processing as lightweight as possible
        *
        *   Simple language reference
        *   https://camel.apache.org/components/latest/languages/simple-language.html
        *
        */
       from("direct:auditing")
-              .routeId("iDaaS-Transactions-KIC")
+              .routeId("iDaaS-DataIntegration-KIC")
               .setHeader("messageprocesseddate").simple("${date:now:yyyy-MM-dd}")
               .setHeader("messageprocessedtime").simple("${date:now:HH:mm:ss:SSS}")
               .setHeader("processingtype").exchangeProperty("processingtype")
@@ -103,30 +98,18 @@ public class CamelConfiguration extends RouteBuilder {
               .setHeader("exchangeID").exchangeProperty("exchangeID")
               .setHeader("internalMsgID").exchangeProperty("internalMsgID")
               .setHeader("bodyData").exchangeProperty("bodyData")
-              .convertBodyTo(String.class).to(getKafkaTopicUri("opsmgmt_platformtransactions"));
+              .convertBodyTo(String.class).to(getKafkaTopicUri("{{idaas.integrationTopic}}"));
 
-      /*
-       * Transactional Audit
-       *
-       * Direct component within platform to ensure we can centralize logic
-       * There are some values we will need to set within every route
-       * We are doing this to ensure we dont need to build a series of beans
-       * and we keep the processing as lightweight as possible
-       *
-       *   Simple language reference
-       *   https://camel.apache.org/components/latest/languages/simple-language.html
-       *
-       */
+      // Application-API requests response style auditing
       from("direct:transactionauditing")
-              .routeId("iDaaS-App-KIC")
+              .routeId("iDaaS-AppIntegration-KIC")
               .setHeader("messageprocesseddate").simple("${date:now:yyyy-MM-dd}")
               .setHeader("messageprocessedtime").simple("${date:now:HH:mm:ss:SSS}")
               .setHeader("processingtype").exchangeProperty("processingtype")
               .setHeader("industrystd").exchangeProperty("industrystd")
-              .setHeader("component").exchangeProperty("componentname")
               .setHeader("messagetrigger").exchangeProperty("messagetrigger")
+              .setHeader("component").exchangeProperty("componentname")
               .setHeader("processname").exchangeProperty("processname")
-              .setHeader("auditdetails").exchangeProperty("auditdetails")
               .setHeader("camelID").exchangeProperty("camelID")
               .setHeader("exchangeID").exchangeProperty("exchangeID")
               .setHeader("internalMsgID").exchangeProperty("internalMsgID")
@@ -134,32 +117,32 @@ public class CamelConfiguration extends RouteBuilder {
               .setHeader("errorID").exchangeProperty("internalMsgID")
               .setHeader("errorData").exchangeProperty("bodyData")
               .setHeader("transactionCount").exchangeProperty("transactionCount")
-              .convertBodyTo(String.class).to(getKafkaTopicUri("opsmgmt_appplatformtransactions"));
+              .setHeader("requestType").exchangeProperty("requestType")
+              .setHeader("transactionDirection").exchangeProperty("transactionDirection")
+              .convertBodyTo(String.class).to(getKafkaTopicUri("{{idaas.appintegrationTopic}}"));
 
       //Servlet - External Audit Endpoint
       from("servlet://KIC-Auditing-EndPoint")
-              .routeId("KIC-GenAuditing-EndPoint")
+              .routeId("KIC-IntegrationAuditing-EndPoint")
               .convertBodyTo(String.class)
-             .wireTap("direct:auditing");
-
+              .wireTap("direct:auditing");
       //Servlet - External Audit Endpoint
       from("servlet://KIC-ApplicationAuditing-EndPoint")
-              .routeId("KIC-TransactionAuditing-EndPoint")
+              .routeId("KIC-ApplicationAuditing-EndPoint")
               .convertBodyTo(String.class)
               .wireTap("direct:transactionauditing");
 
         // Get from Defines KafkaTopic for Integration Processing
-        // General Auditing
-        RouteDefinition route = from(getKafkaTopicUri(config.getKafkaTopicName()))
+        RouteDefinition route = from(getKafkaTopicUri(config.getIntegrationTopic()))
             .removeHeader("breadcrumbId").convertBodyTo(String.class)
-            .process("auditProcessor");
+            .process("auditIntegrationProcessor");
             // Output to configured RDBMS ONLY is isStoreinDb = true
             if (config.isStoreInDb()) {
                 route.multicast().parallelProcessing().to("direct:file", "direct:db");
                 RouteDefinition from = from("direct:db");
-                String columns = String.join(",", AuditMessage.DB_PERSISTABLE_FIELDS);
+                String columns = String.join(",", AuditMessage.DB_Integration_PERSISTABLE_FIELDS);
                 List<String> namedParams = new ArrayList<>();
-                for (String namedParam : AuditMessage.DB_PERSISTABLE_FIELDS) {
+                for (String namedParam : AuditMessage.DB_Integration_PERSISTABLE_FIELDS) {
                     namedParams.add(":?" + namedParam);
                 from = from.setHeader(namedParam, simple("${body." + namedParam + "}"));
                 }
@@ -176,7 +159,30 @@ public class CamelConfiguration extends RouteBuilder {
             }
 
         // Application Auditing Processor
-
+        RouteDefinition route2 = from(getKafkaTopicUri(config.getAppintegrationTopic()))
+              .removeHeader("breadcrumbId").convertBodyTo(String.class)
+              .process("auditAppIntegrationProcessor");
+        // Output to configured RDBMS ONLY is isStoreinDb = true
+        if (config.isStoreInDb()) {
+          route2.multicast().parallelProcessing().to("direct:file", "direct:db");
+          RouteDefinition from = from("direct:db");
+          String columns = String.join(",", AuditMessage.DB_AppIntegration_PERSISTABLE_FIELDS);
+          List<String> namedParams = new ArrayList<>();
+          for (String namedParam : AuditMessage.DB_AppIntegration_PERSISTABLE_FIELDS) {
+              namedParams.add(":?" + namedParam);
+              from = from.setHeader(namedParam, simple("${body." + namedParam + "}"));
+          }
+          String params = String.join(",", namedParams);
+          from.setBody(simple("INSERT INTO " + config.getdbAppIntegrationTableName() + " (" + columns + ") VALUES (" + params + ")"))
+                  .to("jdbc:dataSource?useHeadersAsParameters=true");
+        } else {
+          route2.to("direct:file");
+        }
+      //  Output JSON Documents ONLY is isStoreinFS = true
+      if (config.isStoreInFs()) {
+          from("direct:file").marshal().json(JsonLibrary.Jackson)
+                  .to("file:" + config.getAuditDir());
+      }
 
 
   }

@@ -44,6 +44,6 @@ public class AuditProducer {
     }
 
     public void sendMessageWithHeaders(String message, Map<String, Object> headers) {
-        producerTemplate.sendBodyAndHeaders(config.getKafkaTopicUri(config.getKafkaTopicName()), message, headers);
+        producerTemplate.sendBodyAndHeaders(config.getKafkaTopicUri(config.getIntegrationTopic()), message, headers);
     }
 }

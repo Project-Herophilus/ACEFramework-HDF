@@ -21,8 +21,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class ConfigProperties {
 
     private String kafkaBrokers;
-    private String kafkaTopicName;
-    private String kafkaTopicName_AppAudit;
+    private String integrationTopic;
+    private String appintegrationTopic;
+
     private String auditDir;
     private Boolean storeInDb;
     private Boolean storeInFs;
@@ -31,6 +32,7 @@ public class ConfigProperties {
     private String dbUsername;
     private String dbPassword;
     private String dbIntegrationTableName;
+    private String dbAppIntegrationTableName;
     private String dbAppTableName;
     private Boolean createDbTable;
 
@@ -49,22 +51,12 @@ public class ConfigProperties {
     public void setKafkaBrokers(String kafkaBrokers) {
         this.kafkaBrokers = kafkaBrokers;
     }
-
     // Kafka Topics
     // Kafka - Integration
-    public String getKafkaTopicName() {
-        return kafkaTopicName;
-    }
-    public void setKafkaTopicName(String kafkaTopicName) {
-        this.kafkaTopicName = kafkaTopicName;
-    }
-    // Kafka - App
-    public String getkafkaTopicName_AppAudit() {
-        return kafkaTopicName_AppAudit;
-    }
-    public void setkafkaTopicName_AppAudit(String kafkaTopicName_AppAudit) {
-        this.kafkaTopicName_AppAudit = kafkaTopicName_AppAudit;
-    }
+    public String getIntegrationTopic() {return integrationTopic;}
+    public void setIntegrationTopic(String integrationTopic) { this.integrationTopic = integrationTopic;}
+    public String getAppintegrationTopic() {return appintegrationTopic;}
+    public void setAppintegrationTopic(String appintegrationTopic) { this.appintegrationTopic = appintegrationTopic;}
 
     //Audit Dir
     public String getAuditDir() {
@@ -128,12 +120,14 @@ public class ConfigProperties {
     }
     public void setdbIntegrationTableName(String dbIntegrationTableName) { this.dbIntegrationTableName = dbIntegrationTableName;
     }
-    // Application Auditing
-    public String getdbAppTableName() {
-        return dbAppTableName;
+    // Application Integration Auditing
+    public String getdbAppIntegrationTableName() {
+        return dbAppIntegrationTableName;
     }
-    public void setdbAppTableName(String dbAppTableName) { this.dbAppTableName = dbAppTableName;
+    public void setdbAppIntegrationTableName(String dbAppIntegrationTableName) { this.dbAppIntegrationTableName = dbAppIntegrationTableName;
     }
+    //public String getdbAppTableName() {return dbAppTableName; }
+    // public void setdbAppTableName(String dbAppTableName) { this.dbAppTableName = dbAppTableName; }
 
     // FS - FileSystem
     public boolean isStoreInFs() { return storeInFs; }

@@ -17,9 +17,14 @@ package io.connectedhealth_idaas.kic;
 
 public class AuditMessage {
 
-    public static final String[] DB_PERSISTABLE_FIELDS = new String[] { "messageprocesseddate",
+    public static final String[] DB_Integration_PERSISTABLE_FIELDS = new String[] { "messageprocesseddate",
             "messageprocessedtime", "processingtype", "industrystd", "component", "messagetrigger", "processname",
     "auditdetails", "camelID", "exchangeID", "internalMsgID", "bodyData"};
+
+    public static final String[] DB_AppIntegration_PERSISTABLE_FIELDS = new String[] { "messageprocesseddate",
+            "messageprocessedtime", "processingtype", "industrystd", "component", "messagetrigger", "processname",
+            "auditdetails", "camelID", "exchangeID", "internalMsgID", "bodyData","errorID","errorData","transactionCount",
+            "requestType","transactionDirection"};
 
     private String messageprocesseddate;
     private String messageprocessedtime;
@@ -33,6 +38,11 @@ public class AuditMessage {
     private String exchangeID;
     private String internalMsgID;
     private String bodyData;
+    private String errorID;
+    private String errorData;
+    private Integer transactionCount;
+    private String requestType;
+    private String transactionDirection;
 
     public String getMessageprocesseddate() {
         return messageprocesseddate;
@@ -130,5 +140,43 @@ public class AuditMessage {
         this.bodyData = bodyData;
     }
 
+    public String getErrorID() {
+        return errorID;
+    }
 
+    public void setErrorID(String errorID) {
+        this.errorID = errorID;
+    }
+
+    public String getErrorData() {
+        return errorData;
+    }
+
+    public void setErrorData(String errorData) {
+        this.errorData = errorData;
+    }
+
+    public Integer getTransactionCount(String transactionCount) {
+        return this.transactionCount;
+    }
+
+    public void setTransactionCount(Integer transactionCount) {
+        this.transactionCount = transactionCount;
+    }
+
+    public String getRequestType(String requestType) {
+        return this.requestType;
+    }
+
+    public void setRequestType(String requestType) {
+        this.requestType = requestType;
+    }
+
+    public String getTransactionDirection(String transactionDirection) {
+        return this.transactionDirection;
+    }
+
+    public void setTransactionDirection(String transactionDirection) {
+        this.transactionDirection = transactionDirection;
+    }
 }
