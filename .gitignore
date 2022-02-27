@@ -297,3 +297,6 @@ typings/
 
 # dotenv environment variables file
 .env
+# Added for IntelliJ IDE support throughtout the repo
+./.idea
+./iDaaS-KIC-Integration/.idea
