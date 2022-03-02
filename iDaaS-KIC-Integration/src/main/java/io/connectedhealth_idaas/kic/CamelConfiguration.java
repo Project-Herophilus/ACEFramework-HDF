@@ -115,7 +115,7 @@ public class CamelConfiguration extends RouteBuilder {
               .setHeader("transactionDirection").exchangeProperty("transactionDirection")
               .convertBodyTo(String.class).to(getKafkaTopicUri("{{idaas.appintegrationTopic}}"));
 
-      //Servlet - External Audit Endpoint
+      // Servlet - External Audit Endpoint
       from("servlet://KIC-Auditing-EndPoint")
               .routeId("KIC-IntegrationAuditing-EndPoint")
               .convertBodyTo(String.class)
@@ -131,7 +131,8 @@ public class CamelConfiguration extends RouteBuilder {
             .removeHeader("breadcrumbId").convertBodyTo(String.class)
             .process("auditIntegrationProcessor");
             // Output to configured RDBMS ONLY is isStoreinDb = true
-            if (config.isStoreInDb()) {
+            //if (config.isStoreInDb()) {
+            if (config.isStoreInDb_DataIntegrationAudit()) {
                 route.multicast().parallelProcessing().to("direct:file", "direct:db");
                 RouteDefinition from = from("direct:db");
                 String columns = String.join(",", AuditMessage.DB_Integration_PERSISTABLE_FIELDS);
@@ -147,19 +148,20 @@ public class CamelConfiguration extends RouteBuilder {
                 route.to("direct:file");
                 }
             //  Output JSON Documents ONLY is isStoreinFS = true
-            if (config.isStoreInFs()) {
+            if (config.isStoreInFs_DataIntegrationAudit()) {
                 from("direct:file").marshal().json(JsonLibrary.Jackson)
-                .to("file:" + config.getAuditDir());
+                .to("file:" + config.auditDir_DataIntegrationAuditLocation());
             }
 
-        // Application Auditing Processor
-        /*RouteDefinition route2 = from(getKafkaTopicUri(config.getAppintegrationTopic()))
+        // Application Integration Auditing Processor
+        RouteDefinition route2 = from(getKafkaTopicUri(config.getAppintegrationTopic()))
               .removeHeader("breadcrumbId").convertBodyTo(String.class)
               .process("auditAppIntegrationProcessor");
         // Output to configured RDBMS ONLY is isStoreinDb = true
-        if (config.isStoreInDb()) {
-          route2.multicast().parallelProcessing().to("direct:file", "direct:db");
-          RouteDefinition from = from("direct:db");
+        //if (config.isAppAuditStoreInDb()) {
+        if (config.storeInDb_AppIntegrationAudit) {
+          route2.multicast().parallelProcessing().to("direct:file2", "direct:db2");
+          RouteDefinition from = from("direct:db2");
           String columns = String.join(",", AuditMessage.DB_AppIntegration_PERSISTABLE_FIELDS);
           List<String> namedParams = new ArrayList<>();
           for (String namedParam : AuditMessage.DB_AppIntegration_PERSISTABLE_FIELDS) {
@@ -170,13 +172,13 @@ public class CamelConfiguration extends RouteBuilder {
           from.setBody(simple("INSERT INTO " + config.getdbAppIntegrationTableName() + " (" + columns + ") VALUES (" + params + ")"))
                   .to("jdbc:dataSource?useHeadersAsParameters=true");
         } else {
-          route2.to("direct:file");
-        }*/
+          route2.to("direct:file2");
+        }
       //  Output JSON Documents ONLY is isStoreinFS = true
-     /* if (config.isStoreInFs()) {
-          from("direct:file").marshal().json(JsonLibrary.Jackson)
-                  .to("file:" + config.getAuditDir());
-      }*/
+     if (config.isStoreInFs_AppIntegrationAudit()) {
+         from("direct:file2").marshal().json(JsonLibrary.Jackson)
+                 .to("file:" + config.auditDir_AppIntegrationAuditLocation());
+     }
 
 
   }
