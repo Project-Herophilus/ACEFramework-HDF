@@ -108,18 +108,21 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.3.1</version>
-            <!--42.2.23.redhat-00001-->
         </dependency>
         <dependency>
             <groupId>net.snowflake</groupId>
             <artifactId>snowflake-jdbc</artifactId>
             <version>3.13.2</version>
         </dependency>
+        <!--
+        MongoDB to be uncommented when it is an implementation effort -->
+        <!--
         <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongo-java-driver</artifactId>
-            <version>3.12.10</version>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-mongodb</artifactId>
+            <version>${camel.version}</version>
         </dependency>
+        -->
         <!-- Logging -->
         <dependency>
             <groupId>org.slf4j</groupId>
