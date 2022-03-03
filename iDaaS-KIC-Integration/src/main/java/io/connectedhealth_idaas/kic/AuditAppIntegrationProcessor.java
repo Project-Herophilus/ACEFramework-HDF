@@ -49,9 +49,9 @@ public class AuditAppIntegrationProcessor implements Processor {
         message.setProcessname(getHeader(headers, "processname"));
         message.setErrorID(getHeader(headers, "errorID"));
         message.setErrorData(getHeader(headers, "errorData"));
-        message.getTransactionCount(getHeader(headers,"transactionCount"));
-        message.getRequestType(getHeader(headers,"requestType"));
-        message.getTransactionDirection(getHeader(headers,"transactionDirection"));
+        message.setTransactionCount(getHeader(headers,"transactionCount"));
+        message.setRequestType(getHeader(headers,"requestType"));
+        message.setTransactionDirection(getHeader(headers,"transactionDirection"));
         exchange.getOut().setBody(message);
     }
 
