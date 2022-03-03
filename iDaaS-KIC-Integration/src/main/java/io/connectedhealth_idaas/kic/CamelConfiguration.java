@@ -15,6 +15,7 @@
  */
 package io.connectedhealth_idaas.kic;
 
+import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.model.dataformat.JsonLibrary;
@@ -79,56 +80,105 @@ public class CamelConfiguration extends RouteBuilder {
        *
        */
       from("direct:auditing")
-              .routeId("iDaaS-DataIntegration-KIC")
-              .setHeader("messageprocesseddate").simple("${date:now:yyyy-MM-dd}")
-              .setHeader("messageprocessedtime").simple("${date:now:HH:mm:ss:SSS}")
-              .setHeader("processingtype").exchangeProperty("processingtype")
-              .setHeader("industrystd").exchangeProperty("industrystd")
-              .setHeader("component").exchangeProperty("componentname")
-              .setHeader("messagetrigger").exchangeProperty("messagetrigger")
-              .setHeader("processname").exchangeProperty("processname")
-              .setHeader("auditdetails").exchangeProperty("auditdetails")
-              .setHeader("camelID").exchangeProperty("camelID")
-              .setHeader("exchangeID").exchangeProperty("exchangeID")
-              .setHeader("internalMsgID").exchangeProperty("internalMsgID")
-              .setHeader("bodyData").exchangeProperty("bodyData")
-              .convertBodyTo(String.class).to(getKafkaTopicUri("{{idaas.integrationTopic}}"));
+          .routeId("iDaaS-DataIntegration-KIC")
+          .setHeader("messageprocesseddate").simple("${date:now:yyyy-MM-dd}")
+          .setHeader("messageprocessedtime").simple("${date:now:HH:mm:ss:SSS}")
+          .setHeader("processingtype").exchangeProperty("processingtype")
+          .setHeader("industrystd").exchangeProperty("industrystd")
+          .setHeader("component").exchangeProperty("componentname")
+          .setHeader("messagetrigger").exchangeProperty("messagetrigger")
+          .setHeader("processname").exchangeProperty("processname")
+          .setHeader("auditdetails").exchangeProperty("auditdetails")
+          .setHeader("camelID").exchangeProperty("camelID")
+          .setHeader("exchangeID").exchangeProperty("exchangeID")
+          .setHeader("internalMsgID").exchangeProperty("internalMsgID")
+          .setHeader("bodyData").exchangeProperty("bodyData")
+          .convertBodyTo(String.class).to(getKafkaTopicUri("{{idaas.integrationTopic}}"));
 
       // Application-API requests response style auditing
       from("direct:transactionauditing")
-              .routeId("iDaaS-AppIntegration-KIC")
-              .setHeader("messageprocesseddate").simple("${date:now:yyyy-MM-dd}")
-              .setHeader("messageprocessedtime").simple("${date:now:HH:mm:ss:SSS}")
-              .setHeader("processingtype").exchangeProperty("processingtype")
-              .setHeader("industrystd").exchangeProperty("industrystd")
-              .setHeader("messagetrigger").exchangeProperty("messagetrigger")
-              .setHeader("component").exchangeProperty("componentname")
-              .setHeader("processname").exchangeProperty("processname")
-              .setHeader("camelID").exchangeProperty("camelID")
-              .setHeader("exchangeID").exchangeProperty("exchangeID")
-              .setHeader("internalMsgID").exchangeProperty("internalMsgID")
-              .setHeader("bodyData").exchangeProperty("bodyData")
-              .setHeader("errorID").exchangeProperty("internalMsgID")
-              .setHeader("errorData").exchangeProperty("bodyData")
-              .setHeader("transactionCount").exchangeProperty("transactionCount")
-              .setHeader("requestType").exchangeProperty("requestType")
-              .setHeader("transactionDirection").exchangeProperty("transactionDirection")
-              .convertBodyTo(String.class).to(getKafkaTopicUri("{{idaas.appintegrationTopic}}"));
+          .routeId("iDaaS-AppIntegration-KIC")
+          .setHeader("messageprocesseddate").simple("${date:now:yyyy-MM-dd}")
+          .setHeader("messageprocessedtime").simple("${date:now:HH:mm:ss:SSS}")
+          .setHeader("processingtype").exchangeProperty("processingtype")
+          .setHeader("industrystd").exchangeProperty("industrystd")
+          .setHeader("messagetrigger").exchangeProperty("messagetrigger")
+          .setHeader("component").exchangeProperty("componentname")
+          .setHeader("processname").exchangeProperty("processname")
+          .setHeader("camelID").exchangeProperty("camelID")
+          .setHeader("exchangeID").exchangeProperty("exchangeID")
+          .setHeader("internalMsgID").exchangeProperty("internalMsgID")
+          .setHeader("bodyData").exchangeProperty("bodyData")
+          .setHeader("errorID").exchangeProperty("errorID")
+          .setHeader("errorData").exchangeProperty("errorData")
+          .setHeader("transactionCount").exchangeProperty("transactionCount")
+          .setHeader("requestType").exchangeProperty("requestType")
+          .setHeader("transactionDirection").exchangeProperty("transactionDirection")
+          .convertBodyTo(String.class).to(getKafkaTopicUri("{{idaas.appintegrationTopic}}"));
+
+      /*
+       *  Logging
+       */
+      from("direct:logging")
+              .routeId("logging")
+              .log(LoggingLevel.INFO, log,"Message: [${body}]")
+      ;
 
       // Servlet - External Audit Endpoint
       from("servlet://KIC-Auditing-EndPoint")
-              .routeId("KIC-IntegrationAuditing-EndPoint")
-              .convertBodyTo(String.class)
-              .wireTap("direct:auditing");
+          .routeId("KIC-IntegrationAuditing-EndPoint")
+          .convertBodyTo(String.class)
+          .wireTap("direct:auditing");
       //Servlet - External Audit Endpoint
       from("servlet://KIC-ApplicationAuditing-EndPoint")
-              .routeId("KIC-ApplicationAuditing-EndPoint")
-              .convertBodyTo(String.class)
-              .wireTap("direct:transactionauditing");
+          .routeId("KIC-ApplicationAuditing-EndPoint")
+          .convertBodyTo(String.class)
+          .wireTap("direct:transactionauditing");
+      // Servlet - Testing EndPoints
+      from("servlet://Testing-KIC-DataIntegrationAuditing-EndPoint")
+           .routeId("Testing-KIC-IntegrationAuditing-EndPoint")
+           .convertBodyTo(String.class)
+           // set Auditing Properties
+           .setProperty("processingtype").constant("data")
+           .setProperty("appname").constant("iDAAS-KIC-Test")
+           .setProperty("industrystd").constant("N/A")
+           .setProperty("messagetrigger").constant("N/A")
+           .setProperty("componentname").simple("${routeId}")
+           .setProperty("processname").constant("Input")
+           .setProperty("camelID").simple("${camelId}")
+           .setProperty("exchangeID").simple("${exchangeId}")
+           .setProperty("internalMsgID").simple("${id}")
+           .setProperty("bodyData").simple("${body}")
+           .setProperty("auditdetails").constant("Data Integration KIC message received")
+           .wireTap("direct:auditing");
+      from("servlet://Testing-KIC-ApplicationAuditing-EndPoint")
+          .routeId("Testing-KIC-ApplicationAuditing-EndPoint")
+              .setProperty("processingtype").constant("app-data")
+              .setProperty("appname").constant("iDAAS-KIC-Test")
+              .setProperty("industrystd").constant("N/A")
+              .setProperty("messagetrigger").constant("N/A")
+              .setProperty("componentname").simple("${routeId}")
+              .setProperty("processname").constant("Input-AppIntgrtn-Test")
+              .setProperty("camelID").simple("${camelId}")
+              .setProperty("exchangeID").simple("${exchangeId}")
+              .setProperty("internalMsgID").simple("${id}")
+              .setProperty("bodyData").simple("${body}")
+              .setProperty("auditdetails").constant("App Integration KIC message received")
+              .setProperty("requestType").constant("CLI/SDK")
+              .setProperty("errorID").constant("123")
+              .setProperty("errorData").constant("Error Detail: Error Occurred")
+              .setProperty("transactionCount").constant("5")
+              .setProperty("transactionDirection").constant("Request")
+          .convertBodyTo(String.class)
+          .wireTap("direct:transactionauditing");
+
 
         // Get from Defines KafkaTopic for Integration Processing
         RouteDefinition route = from(getKafkaTopicUri(config.getIntegrationTopic()))
+            .routeId("KIC-DataIntegration-Topic")
+            .log(LoggingLevel.INFO, log,"Message Pre Remove Headers: [${body}]")
             .removeHeader("breadcrumbId").convertBodyTo(String.class)
+            .log(LoggingLevel.INFO, log,"Message: [${body}]")
             .process("auditIntegrationProcessor");
             // Output to configured RDBMS ONLY is isStoreinDb = true
             //if (config.isStoreInDb()) {
@@ -150,11 +200,13 @@ public class CamelConfiguration extends RouteBuilder {
             //  Output JSON Documents ONLY is isStoreinFS = true
             if (config.isStoreInFs_DataIntegrationAudit()) {
                 from("direct:file").marshal().json(JsonLibrary.Jackson)
+                .routeId("KIC-DataIntegration-FileOutput")
                 .to("file:" + config.auditDir_DataIntegrationAuditLocation());
             }
 
         // Application Integration Auditing Processor
         RouteDefinition route2 = from(getKafkaTopicUri(config.getAppintegrationTopic()))
+              .routeId("KIC-AppIntegration-Topic")
               .removeHeader("breadcrumbId").convertBodyTo(String.class)
               .process("auditAppIntegrationProcessor");
         // Output to configured RDBMS ONLY is isStoreinDb = true
@@ -177,6 +229,7 @@ public class CamelConfiguration extends RouteBuilder {
       //  Output JSON Documents ONLY is isStoreinFS = true
      if (config.isStoreInFs_AppIntegrationAudit()) {
          from("direct:file2").marshal().json(JsonLibrary.Jackson)
+                 .routeId("KIC-AppIntegration-FileOutput")
                  .to("file:" + config.auditDir_AppIntegrationAuditLocation());
      }
 
