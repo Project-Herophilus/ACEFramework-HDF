@@ -40,7 +40,7 @@ public class AuditMessage {
     private String bodyData;
     private String errorID;
     private String errorData;
-    private Integer transactionCount;
+    private String transactionCount;
     private String requestType;
     private String transactionDirection;
 
@@ -156,24 +156,24 @@ public class AuditMessage {
         this.errorData = errorData;
     }
 
-    public Integer getTransactionCount(String transactionCount) {
-        return this.transactionCount;
+    public String getTransactionCount() {
+        return transactionCount;
     }
 
-    public void setTransactionCount(Integer transactionCount) {
+    public void setTransactionCount(String transactionCount) {
         this.transactionCount = transactionCount;
     }
 
-    public String getRequestType(String requestType) {
-        return this.requestType;
+    public String getRequestType() {
+        return requestType;
     }
 
     public void setRequestType(String requestType) {
         this.requestType = requestType;
     }
 
-    public String getTransactionDirection(String transactionDirection) {
-        return this.transactionDirection;
+    public String getTransactionDirection() {
+        return transactionDirection;
     }
 
     public void setTransactionDirection(String transactionDirection) {
