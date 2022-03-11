@@ -116,23 +116,25 @@ public class CamelConfiguration extends RouteBuilder {
               .convertBodyTo(String.class).to(getKafkaTopicUri("{{idaas.appintegrationTopic}}"));
 
       // Servlet - External Audit Endpoint
-      from("servlet://KIC-Auditing-EndPoint")
+      from("servlet://KIC-DataIntegrationAuditing")
               .routeId("KIC-IntegrationAuditing-EndPoint")
               .convertBodyTo(String.class)
               .wireTap("direct:auditing");
       //Servlet - External Audit Endpoint
-      from("servlet://KIC-ApplicationAuditing-EndPoint")
+      from("servlet://KIC-ApplicationIntegrationAuditing")
               .routeId("KIC-ApplicationAuditing-EndPoint")
               .convertBodyTo(String.class)
               .wireTap("direct:transactionauditing");
 
         // Get from Defines KafkaTopic for Integration Processing
         RouteDefinition route = from(getKafkaTopicUri(config.getIntegrationTopic()))
+            .routeId("KIC-DataIntegrationAuditing-Persistence")
             .removeHeader("breadcrumbId").convertBodyTo(String.class)
             .process("auditIntegrationProcessor");
             // Output to configured RDBMS ONLY is isStoreinDb = true
             //if (config.isStoreInDb()) {
-            if (config.isStoreInDb_DataIntegrationAudit()) {
+            if (config.isStoreInDb_DataIntegrationAudit())
+            {
                 route.multicast().parallelProcessing().to("direct:file", "direct:db");
                 RouteDefinition from = from("direct:db");
                 String columns = String.join(",", AuditMessage.DB_Integration_PERSISTABLE_FIELDS);
@@ -144,7 +146,7 @@ public class CamelConfiguration extends RouteBuilder {
                 String params = String.join(",", namedParams);
                 from.setBody(simple("INSERT INTO " + config.getdbIntegrationTableName() + " (" + columns + ") VALUES (" + params + ")"))
                 .to("jdbc:dataSource?useHeadersAsParameters=true");
-                } else {
+            } else {
                 route.to("direct:file");
                 }
             //  Output JSON Documents ONLY is isStoreinFS = true
@@ -155,11 +157,13 @@ public class CamelConfiguration extends RouteBuilder {
 
         // Application Integration Auditing Processor
         RouteDefinition route2 = from(getKafkaTopicUri(config.getAppintegrationTopic()))
-              .removeHeader("breadcrumbId").convertBodyTo(String.class)
+               .routeId("KIC-AppIntegrationAuditing-Persistence")
+               .removeHeader("breadcrumbId").convertBodyTo(String.class)
               .process("auditAppIntegrationProcessor");
         // Output to configured RDBMS ONLY is isStoreinDb = true
         //if (config.isAppAuditStoreInDb()) {
-        if (config.storeInDb_AppIntegrationAudit) {
+        if (config.storeInDb_AppIntegrationAudit)
+        {
           route2.multicast().parallelProcessing().to("direct:file2", "direct:db2");
           RouteDefinition from = from("direct:db2");
           String columns = String.join(",", AuditMessage.DB_AppIntegration_PERSISTABLE_FIELDS);
