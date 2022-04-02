@@ -1,17 +1,24 @@
-# iDaaS KIC
-KIC - Knowledge, Insight and Conformance - designed to be a platform that maintains all activity that occurs with the 
-iDaaS Components. This is the upstream for RedHat Healthcare's <a href="https://github.com/RedHat-Healthcare/iDaaS-KIC" target="_blank">iDaaS KIC</a>.<br/>
-
-iDAAS KIC platform is intended for persisting of data needed within the iDAAS. The current main usage is
-for auditing and logging activities.
-
-## Architecture
-The iDaaS KIC architecture is intended to enable two critical forms of connectivity to its capabilities: 
-direct connectivity via topics/queues and service endpoint connectivity. This decision was made to provide
-teams the greatest amount of flexibility.
+# iDaaS KIC Integration
+iDaaS KIC Integration is specifically designed to be a comprehensive integration tier for iDaaS. As parts of what it enables it includes
+API endpoints, defined topic endpoints, parsing and persistence layers for the data it injests. All of the key settings needed are provided within properties for simplifying the implementation needs. The iDaaS KIC architecture is intended to enable two critical forms of connectivity to its capabilities: direct connectivity via topics/queues and service endpoint connectivity. This decision was made to provide teams the greatest amount of flexibility.
 
 ![iDaaS Dataflow](https://github.com/Project-Herophilus/Project-Herophilus-Assets/blob/main/Platform/Images/iDAAS-Platform/Architectures/iDaaS-KIC.png)
 
+## Add-Ons
+This module contains three supporting directories. The intent of these artifacts to enable resources to work locally: <br/>
++ DataTier: DDL that support this implementation
++ Grafana-Dashboards: Some sample dashboards to help quickly see the data in the RDBMS data tier
+
+## Data Persistence Flow Steps
+Data can be pushed into specific topics from other iDaaS components OR by using the endpoints this solution provides.
+
+1. The integration application subscribes to all the data from the specific topic.<br/>
+2. The data will be processed from the topic and the header attributes will all be parsed.<br/>
+3. Depending on the settings in the application.properties the header attributes can go to files, or a relational
+database table. <br/>
+
+# Platform
+In this section we will cover various aspects of this module.
 
 ## Pre-Requisites
 For all iDaaS design patterns it should be assumed that you will either install as part of this effort, or have the following:
@@ -33,12 +40,6 @@ For all iDaaS design patterns it should be assumed that you will either install 
    potential tools such as tooling like [Kafka Tool](https://www.kafkatool.com/), [KafDrop](https://github.com/obsidiandynamics/kafdrop),
    [Provectus Kafka UI](https://github.com/provectus/kafka-ui).
 
-## Add-Ons
-This solution contains three supporting directories. The intent of these artifacts to enable
-resources to work locally: <br/>
-+ DataTier: DDL that support this implementation
-+ Grafana-Dashboards: Some sample dashboards to help quickly see the data in the RDBMS data tier
-
 ## Database Technologies: RDBMS (Relational Database Management Systems) / NoSQL / Cloud Enablement
 We wanted to provide a very simple way to have users be able to visualize and report on anything the iDaaS framework(s) 
 do. So we have included a very basic extensible relational database tier. Prior to 2022 we supported other database
@@ -49,6 +50,7 @@ technologies so we also support within the platform the ability to natively writ
 # Platform Implementation
 While you can choose not to store the data that KIC parses and processes the majority of resources we have worked with
 leverage an RDBMS. 
+   
 ## Filesystem
 1. Configure the application.properties to set the directory where the JSON documents created will be placed
 2. Start up and start processing data
@@ -61,6 +63,7 @@ the configuration process.
    password, and database name )
 4. Start up and start processing data
 
+ 
 # Configuring the Platform
 The platform has a number of settings and configurational capabilities provided through a simple to read and enhance
 application.properties file. We implemented this to ensure that implementations could be in control of common platform
@@ -137,19 +140,11 @@ idaas.dbDriverClassName=org.postgresql.Driver
 idaas.dbUrl=jdbc:postgresql://localhost:5432/idaas_kic
 idaas.dbPassword=Developer123
 idaas.dbUsername=postgres
-
-# Legacy Prior to 2022
-# MySQL
-#idaas.dbDriverClassName=com.mysql.cj.jdbc.Driver
-#idaas.dbUrl=jdbc:mysql://localhost:3306/kic?useLegacyDatetimeCode=false&serverTimezone=GMT
-#idaas.dbUsername=root
-#idaas.dbPassword=Developer123
-#idaas.dbTableName=insight
-# code is located in DataSourceConfiguration.java
-
 ```
-# Start The Engine
 
+# Start The Engine
+This section is intended to have all the needed steps to get this module running.
+   
 ## Building
 To ensure the best results please make sure you have the latest code from the specific repositor(ies.)
 From the command line, or your preferred IDE, pull the latest code and then you can run a build from the command line
@@ -175,8 +170,7 @@ config in the same directory as the jar file and moved the application.propertie
 java -jar <jarfile.jar> --spring.config.location=file:./config/application.properties
 ```
 
-### Testing
-Testing:<br/>
+# Testing
 In order for any testing to work you must:
 
 + Have a Kafka server up and ready to process data to/from.
@@ -189,19 +183,14 @@ localhost:9970/KIC-DataIntegrationAuditing. For Application Integration you can 
 localhost:9970/KIC-ApplicationIntegrationAuditing. You can leverage test data for iDaaS-KIC from our Assets
 by going to the following specific [link](https://github.com/Project-Herophilus/Project-Herophilus-Assets/tree/main/Testing/TestData/kic-audit)
 To test the API endpoints we also have a preconfigured Postman invocation set [here](https://www.postman.com/winter-robot-787282/workspace/intelligent-daas/collection/16526170-fb4cdfdd-9a65-4f04-9e32-b807921c1b5e)  
+
 ## Scenario: Processing Audit Transactions
 The implementation processes all the data from their respective topics as defined in application.properties.
 
-## Data Flow Steps
-1. The integration application subscribes to all the data from the specific topic.<br/>
-2. The data will be processed from the topic and the header attributes will all be parsed.<br/>
-3. Depending on the settings in the application.properties the header attributes can go to files, or a relational
-database table. <br/>
-
-## Ongoing Enhancements
+# Ongoing Enhancements
 We maintain all enhancements within the Git Hub portal under the projects tab, please feel free to make recommendations 
 our goal is to continually improve.
 
-## Defects/Bugs
+# Defects/Bugs
 All defects or bugs should be submitted through the Git Hub Portal under the issues tab
 Happy using and coding....
