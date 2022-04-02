@@ -40,7 +40,7 @@ For all iDaaS design patterns it should be assumed that you will either install 
    potential tools such as tooling like [Kafka Tool](https://www.kafkatool.com/), [KafDrop](https://github.com/obsidiandynamics/kafdrop),
    [Provectus Kafka UI](https://github.com/provectus/kafka-ui).
 
-## Database Technologies: RDBMS (Relational Database Management Systems) / NoSQL / Cloud Enablement
+## Database Technologies: RDBMS / NoSQL / Cloud Enablement
 We wanted to provide a very simple way to have users be able to visualize and report on anything the iDaaS framework(s) 
 do. So we have included a very basic extensible relational database tier. Prior to 2022 we supported other database
 technologies. However, to simplify what we deliver we leverage <a href="https://www.postgresql.org" target="_blank">
