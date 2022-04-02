@@ -8,5 +8,5 @@ Here are the modules that make up iDaaS-KIC.
 | -------------|----------|
 |[iDaaS KIC Integration](https://github.com/Project-Herophilus/iDaaS-KIC/tree/main/iDaaS-KIC-Integration)| An Apache Camel based platform that has endpoints, parsers, data processing components to the various data structures and some generic Grafana Dashboards|
 |[iDaaS KIC Node Based](https://github.com/Project-Herophilus/iDaaS-KIC/tree/main/iDaaS-KIC-Web-API)|Node based platform. This platform includes the API endpoints, parsing, and processing capabilities|
-|[iDaaS KICW Web UI](https://github.com/Project-Herophilus/iDaaS-KIC/tree/main/iDaaS-KIC-Web-UI/kicwebui)|Eventual user interface for iDaaS-KIC|
+|[iDaaS KIC Web UI](https://github.com/Project-Herophilus/iDaaS-KIC/tree/main/iDaaS-KIC-Web-UI/kicwebui)|Eventual user interface for iDaaS-KIC|
 
