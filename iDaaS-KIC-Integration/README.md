@@ -184,9 +184,6 @@ localhost:9970/KIC-ApplicationIntegrationAuditing. You can leverage test data fo
 by going to the following specific [link](https://github.com/Project-Herophilus/Project-Herophilus-Assets/tree/main/Testing/TestData/kic-audit)
 To test the API endpoints we also have a preconfigured Postman invocation set [here](https://www.postman.com/winter-robot-787282/workspace/intelligent-daas/collection/16526170-fb4cdfdd-9a65-4f04-9e32-b807921c1b5e)  
 
-## Scenario: Processing Audit Transactions
-The implementation processes all the data from their respective topics as defined in application.properties.
-
 # Ongoing Enhancements
 We maintain all enhancements within the Git Hub portal under the projects tab, please feel free to make recommendations 
 our goal is to continually improve.
