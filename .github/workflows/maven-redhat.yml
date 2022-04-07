@@ -22,19 +22,6 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         cache: maven
-    - name: Upstream - Maven Build (with mvn -B)
-      run: mvn -B package -f pom.xml
-    - name: Upstream - Java Maven Release
-      uses: qcastel/github-actions-maven-release@v1.12.16
-      env:
-        JAVA_HOME: /usr/lib/jvm/java-11-openjdk/
-      with:
-        access-token: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
-        release-branch-name: ${{ github.event.inputs.branch }}
-        version-major: ${{ github.event.inputs.increment-major }}
-        version-minor: ${{ github.event.inputs.increment-minor }}
-        maven-args: "-Dmaven.deploy.skip=true"
-        git-release-bot-name: "idaas-bot"
     - name: RedHat Healthcare Maven Build (with mvn -B)
       working-directory: ./iDaaS-KIC-Integration
       run: mvn -B clean install
@@ -47,6 +34,5 @@ jobs:
         release-branch-name: ${{ github.event.inputs.branch }}
         version-major: ${{ github.event.inputs.increment-major }}
         version-minor: ${{ github.event.inputs.increment-minor }}
-        maven-args: "-Dmaven.deploy.skip=true -f pom-redhat.xml"
+        maven-args: "-Dmaven.deploy.skip=true -f /iDaaS-KIC-Integration/pom-redhat.xml"
         git-release-bot-name: "idaas-bot"
-
