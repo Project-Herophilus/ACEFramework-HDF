@@ -37,7 +37,7 @@ jobs:
         git-release-bot-name: "idaas-bot"
     - name: RedHat Healthcare Maven Build (with mvn -B)
       working-directory: ./iDaaS-KIC-Integration
-      run: mvn -B package 
+      run: mvn -B clean install
     - name: RedHat Healthcare - Java Maven Release
       uses: qcastel/github-actions-maven-release@v1.12.16
       env:
