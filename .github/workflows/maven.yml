@@ -23,7 +23,7 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Upstream Maven Build (with mvn -B)
-      run: mvn -B package --file pom.xml
+      run: mvn -B package -F pom.xml
     - name: Java Maven Release
       uses: qcastel/github-actions-maven-release@v1.12.16
       env:
@@ -36,7 +36,7 @@ jobs:
         maven-args: "-Dmaven.deploy.skip=true"
         git-release-bot-name: "idaas-bot"
     - name: RedHat Healthcare Maven Build (with mvn -B)
-      run: mvn -B package --file pom_redhat.xml
+      run: mvn -B package -F pom-redhat.xml
     - name: Java Maven Release
       uses: qcastel/github-actions-maven-release@v1.12.16
       env:
