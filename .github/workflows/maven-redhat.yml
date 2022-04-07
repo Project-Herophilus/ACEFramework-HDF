@@ -34,5 +34,5 @@ jobs:
         release-branch-name: ${{ github.event.inputs.branch }}
         version-major: ${{ github.event.inputs.increment-major }}
         version-minor: ${{ github.event.inputs.increment-minor }}
-        maven-args: "-Dmaven.deploy.skip=true -f pom-redhat.xml"
+        maven-args: "-Dmaven.deploy.skip=true -f ./iDaaS-KIC-Integration/pom-redhat.xml"
         git-release-bot-name: "idaas-bot"
