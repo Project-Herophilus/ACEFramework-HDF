@@ -36,7 +36,7 @@ jobs:
         maven-args: "-Dmaven.deploy.skip=true"
         git-release-bot-name: "idaas-bot"
     - name: RedHat Healthcare Maven Build (with mvn -B)
-      run: mvn -B package -f ./iDaaS-KIC-Integration/pom-redhat.xml
+      run: mvn -B package 
     - name: RedHat Healthcare - Java Maven Release
       uses: qcastel/github-actions-maven-release@v1.12.16
       env:
@@ -46,6 +46,6 @@ jobs:
         release-branch-name: ${{ github.event.inputs.branch }}
         version-major: ${{ github.event.inputs.increment-major }}
         version-minor: ${{ github.event.inputs.increment-minor }}
-        maven-args: "-Dmaven.deploy.skip=true"
+        maven-args: "-Dmaven.deploy.skip=true -f pom-redhat.xml"
         git-release-bot-name: "idaas-bot"
 
