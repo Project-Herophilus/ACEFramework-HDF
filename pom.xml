@@ -4,14 +4,14 @@
     <!--Internal Project Details-->
     <groupId>io.connectedhealth_idaas.kic</groupId>
     <artifactId>idaas_kic</artifactId>
-    <version>2022.04.13-SNAPSHOT</version>
+    <version>2022.04.13</version>
     <packaging>pom</packaging>
     
       <scm>
       <connection>scm:git:https://github.com/Project-Herophilus/iDaaS-KIC.git</connection>
       <url>https://github.com/Project-Herophilus/iDaaS-KIC</url>
       <developerConnection>scm:git:https://github.com/Project-Herophilus/iDaaS-KIC</developerConnection>
-      <tag>v1.0.0</tag>
+      <tag>v2022.04.13</tag>
     </scm>
 
     
