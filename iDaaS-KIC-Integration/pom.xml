@@ -248,12 +248,15 @@
             <id>redhat</id>
             <activation>
                 <property>
-                    <name>!redhat</name>
+                    <name>redhat</name>
                 </property>
             </activation>
             <properties>
                 <fabric8-maven-plugin.version>4.3.1</fabric8-maven-plugin.version>
                 <fuse.version>7.10.0.fuse-sb2-7_10_0-00014-redhat-00001</fuse.version>
+
+                <!-- using camel3 camel-rest with camel 2.23 may cause issues -->
+                <camel3.version>3.11.5.fuse-800012-redhat-00001</camel3.version>
             </properties>
             <dependencyManagement>
                 <dependencies>
@@ -297,6 +300,7 @@
                 <dependency>
                     <groupId>org.apache.camel</groupId>
                     <artifactId>camel-rest</artifactId>
+                    <version>${camel3.version}</version>
                 </dependency>
                 <!-- XML Parsing -->
                 <dependency>
