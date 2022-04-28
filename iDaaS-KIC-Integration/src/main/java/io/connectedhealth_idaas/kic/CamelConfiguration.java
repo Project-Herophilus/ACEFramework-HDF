@@ -182,7 +182,7 @@ public class CamelConfiguration extends RouteBuilder {
             .process("auditIntegrationProcessor");
             // Output to configured RDBMS ONLY is isStoreinDb = true
             //if (config.isStoreInDb()) {
-            if (config.isStoreInDb_DataIntegrationAudit()) {
+            /*if (config.isStoreInDb_DataIntegrationAudit()) {
                 route.multicast().parallelProcessing().to("direct:file", "direct:db");
                 RouteDefinition from = from("direct:db");
                 String columns = String.join(",", AuditMessage.DB_Integration_PERSISTABLE_FIELDS);
@@ -197,8 +197,11 @@ public class CamelConfiguration extends RouteBuilder {
                 } else {
                 route.to("direct:file");
                 }
+
+             */
             //  Output JSON Documents ONLY is isStoreinFS = true
             if (config.isStoreInFs_DataIntegrationAudit()) {
+                route.to("direct:file");
                 from("direct:file").marshal().json(JsonLibrary.Jackson)
                 .routeId("KIC-DataIntegration-FileOutput")
                 .to("file:" + config.auditDir_DataIntegrationAuditLocation());
@@ -211,7 +214,7 @@ public class CamelConfiguration extends RouteBuilder {
               .process("auditAppIntegrationProcessor");
         // Output to configured RDBMS ONLY is isStoreinDb = true
         //if (config.isAppAuditStoreInDb()) {
-        if (config.storeInDb_AppIntegrationAudit) {
+        /*if (config.storeInDb_AppIntegrationAudit) {
           route2.multicast().parallelProcessing().to("direct:file2", "direct:db2");
           RouteDefinition from = from("direct:db2");
           String columns = String.join(",", AuditMessage.DB_AppIntegration_PERSISTABLE_FIELDS);
@@ -226,8 +229,10 @@ public class CamelConfiguration extends RouteBuilder {
         } else {
           route2.to("direct:file2");
         }
+        */
       //  Output JSON Documents ONLY is isStoreinFS = true
      if (config.isStoreInFs_AppIntegrationAudit()) {
+         route2.to("direct:file2");
          from("direct:file2").marshal().json(JsonLibrary.Jackson)
                  .routeId("KIC-AppIntegration-FileOutput")
                  .to("file:" + config.auditDir_AppIntegrationAuditLocation());
