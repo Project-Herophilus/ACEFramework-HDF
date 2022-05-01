@@ -42,3 +42,18 @@ jobs:
         maven-args: "-f pom-redhat.xml"
         maven-repo-server-id: github
         maven-project-folder: iDaaS-KIC-Integration
+    - name: Java Maven release Upstream
+      uses: qcastel/github-actions-maven-release@v1.12.16
+      env:
+        JAVA_HOME: /usr/lib/jvm/java-11-openjdk/
+        MAVEN_REPO_SERVER_ID: github
+        MAVEN_REPO_SERVER_USERNAME: idaas-bot
+        MAVEN_REPO_SERVER_PASSWORD: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
+      with:
+        access-token: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
+        release-branch-name: ${{ github.event.inputs.branch }}
+        version-major: ${{ github.event.inputs.increment-major }}
+        version-minor: ${{ github.event.inputs.increment-minor }}
+        git-release-bot-name: "idaas-bot"
+        maven-options: "-s /github/workspace/.github/workflows/settings.xml"
+        maven-repo-server-id: github
