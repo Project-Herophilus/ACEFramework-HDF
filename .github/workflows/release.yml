@@ -44,7 +44,7 @@ jobs:
     - name: Deploy Red Hat Artifacts
       run: mvn -s /github/workspace/.github/workflows/settings.xml -B deploy --file pom.xml
       env:
-        JAVA_HOME: /usr/lib/jvm/java-11-openjdk/
+        GITHUB_TOKEN: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
         MAVEN_REPO_SERVER_ID: github
         MAVEN_REPO_SERVER_USERNAME: idaas-bot
         MAVEN_REPO_SERVER_PASSWORD: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
