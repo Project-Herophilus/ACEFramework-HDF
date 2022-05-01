@@ -29,6 +29,13 @@
         <fuse.version>7.10.0.fuse-sb2-7_10_0-00014-redhat-00001</fuse.version>
     </properties>
     
+    <scm>
+      <connection>scm:git:https://github.com/Project-Herophilus/iDaaS-KIC.git</connection>
+      <url>https://github.com/Project-Herophilus/iDaaS-KIC</url>
+      <developerConnection>scm:git:https://github.com/Project-Herophilus/iDaaS-KIC</developerConnection>
+      <tag>v1.0.0</tag>
+    </scm>
+    
     <distributionManagement>
         <repository>
           <id>github</id>
