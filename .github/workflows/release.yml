@@ -25,7 +25,7 @@ jobs:
       uses: actions/checkout@v2
       with:
         token: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
-    - name: Java Maven release
+    - name: Java Maven release Red Hat
       uses: qcastel/github-actions-maven-release@v1.12.16
       env:
         JAVA_HOME: /usr/lib/jvm/java-11-openjdk/
@@ -39,4 +39,6 @@ jobs:
         version-minor: ${{ github.event.inputs.increment-minor }}
         git-release-bot-name: "idaas-bot"
         maven-options: "-s /github/workspace/.github/workflows/settings.xml"
+        maven-args: "-f pom-redhat.xml"
         maven-repo-server-id: github
+        maven-project-folder: iDaaS-KIC-Integration
