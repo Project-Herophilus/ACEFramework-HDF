@@ -2,7 +2,7 @@
 KIC - Knowledge, Insight and Conformance - designed to be a platform that maintains all activity that occurs within any 
 of the iDaaS Components. Additionally, it has been extended to support general application and data integration needs.
 
-Here is a generic visual to show how iDaaS-KIC can, and is, used today.
+Here is a generic visual to show how iDaaS-KIC can, and is, used today:
 
 ![iDaaS Dataflow](https://github.com/Project-Herophilus/Project-Herophilus-Assets/blob/main/Platform/Images/iDAAS-Platform/iDaaS-KIC-General.png)
 
