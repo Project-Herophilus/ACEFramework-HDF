@@ -38,7 +38,7 @@ jobs:
         version-major: ${{ github.event.inputs.increment-major }}
         version-minor: ${{ github.event.inputs.increment-minor }}
         git-release-bot-name: "idaas-bot"
-        maven-options: "-s /github/workspace/.github/workflows/settings.xml"
+        maven-options: "-f pom-redhat.xml -s /github/workspace/.github/workflows/settings.xml"
         maven-args: "-f pom-redhat.xml"
         maven-repo-server-id: github
         maven-project-folder: iDaaS-KIC-Integration
