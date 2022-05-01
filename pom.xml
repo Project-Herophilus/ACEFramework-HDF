@@ -13,6 +13,14 @@
       <developerConnection>scm:git:https://github.com/Project-Herophilus/iDaaS-KIC</developerConnection>
       <tag>v1.0.0</tag>
     </scm>
+    
+    <distributionManagement>
+        <repository>
+          <id>github</id>
+          <name>iDaaS-KIC Packages</name>
+          <url>https://maven.pkg.github.com/Project-Herophilus/iDaaS-KIC</url>
+        </repository>
+    </distributionManagement>
 
     
     <properties>
