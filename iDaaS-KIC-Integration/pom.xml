@@ -150,6 +150,11 @@
                 <groupId>org.apache.camel</groupId>
                 <artifactId>camel-bean</artifactId>
             </dependency>
+            <!-- SQL  -->
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-sql</artifactId>
+            </dependency>
             <!-- JDBC -->
             <dependency>
                 <groupId>org.apache.camel</groupId>
