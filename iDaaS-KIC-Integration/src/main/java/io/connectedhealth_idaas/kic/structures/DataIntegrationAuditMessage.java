@@ -17,8 +17,8 @@ package io.connectedhealth_idaas.kic.structures;
 
 public class DataIntegrationAuditMessage {
 
-    public String messageprocesseddate;
-    public String messageprocessedtime;
+    private String messageprocesseddate;
+    private String messageprocessedtime;
     private String processingtype;
     private String industrystd;
     private String component;

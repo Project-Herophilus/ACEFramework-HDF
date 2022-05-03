@@ -29,6 +29,9 @@ import org.apache.camel.component.kafka.KafkaComponent;
 import org.apache.camel.component.kafka.KafkaEndpoint;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.apache.camel.component.servlet.CamelHttpTransportServlet;
+//import javax.sql.DataSource;
+import org.apache.camel.component.sql.SqlComponent;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 // Custom Parser Library
 import io.connectedhealth_idaas.kic.structures.*;
 
@@ -48,7 +51,6 @@ public class CamelConfiguration extends RouteBuilder {
         KafkaEndpoint kafkaEndpoint = new KafkaEndpoint();
         return kafkaEndpoint;
     }
-
 
     @Bean
     ServletRegistrationBean camelServlet() {
@@ -177,49 +179,25 @@ public class CamelConfiguration extends RouteBuilder {
                 .wireTap("direct:transactionauditing");
 
 
-        // KafkaTopic processing for Data Integration Processing
+        // KafkaTopic processing for Data Integration Audit Processing
         from(getKafkaTopicUri(config.getIntegrationTopic()))
              .routeId("KIC-DataIntegration-Topic")
              //.log(LoggingLevel.INFO, log, "Message Pre Remove Headers: [${body}]")
              .removeHeader("breadcrumbId").convertBodyTo(String.class)
-             //.log(LoggingLevel.INFO, log, "Message: [${body}]")
-             //.process("auditDataIntegrationProcessor");
              .choice().when(simple("{{idaas.storeInFs_DataIntegrationAudit}}"))
                 .to("file:" + config.auditDir_DataIntegrationAuditLocation())
              .choice().when(simple("{{idaas.storeInDb_DataIntegrationAudit}}"))
                  //.log(LoggingLevel.INFO, log, "Data Integration Message: [${body}]")
-                 .unmarshal(new JacksonDataFormat(DataIntegrationAuditMessage.class))
-                .log(LoggingLevel.INFO, log, "Processed Date: [${body.messageprocesseddate}]")
-                .log(LoggingLevel.INFO, log, "Processed Time: [${body.messageprocessedtime}]")
-                .to("sql:insert into audit_dataintegration (messagedate, processingtype, industrystd," +
-                        "component) values (:#${body.messageprocesseddate},:#${body.processingtype}," +
-                        ":#${body.industrystd},:#${body.component})")
+                //.log(LoggingLevel.INFO, log, "Data Integration Message: [${body.camelid}]")
+                .unmarshal(new JacksonDataFormat(DataIntegrationAuditMessage.class))
+                .to("sql:insert into intgrtn_insight (messagedate, processingtype, industrystd," +
+                        "component, messagetrigger, processname, auditdetails, exchangeid, " +
+                        "bodydata, messagetime, camelid) " +
+                        "values (:#${body.messageprocesseddate},:#${body.processingtype}" +
+                        ",:#${body.industrystd},:#${body.component},:#${body.messagetrigger},:#${body.processname}" +
+                        ",:#${body.auditdetails},:#${body.exchangeID},:#${body.bodyData},:#${body.messageprocessedtime}" +
+                        ",:#${body.camelID})")
                 .endChoice();
-                         //":${body.messagegprocessedtime})")
-
-
-    }
-
-    /*
-    create table audit_dataintegration
-(
-    messagetime varchar(25),
-    messagetrigger       varchar(25),
-    processname          varchar(55),
-    auditdetails         varchar(199),
-    camelid              varchar(49),
-    exchangeid           varchar(49),
-    internalmsgid        varchar(49),
-    auditentiremessage   text,
-    bodydata             text,
-    createddate          timestamp default CURRENT_TIMESTAMP
-);
-
-     */
-    /*
-    .to("sql:insert into etl_mandatoryreporting (organizationid,patientaccountnumber, patientlastname, patientfirstname, zipcode, roombed, " +
-            "age, gender, admissiondate) values( :#${body.organizationId},:#${body.patientAccount},:#${body.patientLastName}," +
-            ":#${body.patientFirstName},:#${body.zipCode},:#${body.roomBed},:#${body.age},:#${body.gender},:#${body.admissionDate})");
-     */
+   }
 
 }
