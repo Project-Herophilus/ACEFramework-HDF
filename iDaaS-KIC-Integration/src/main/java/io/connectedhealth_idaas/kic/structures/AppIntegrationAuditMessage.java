@@ -13,18 +13,9 @@
  *  implied.  See the License for the specific language governing
  *  permissions and limitations under the License.
  */
-package io.connectedhealth_idaas.kic;
+package io.connectedhealth_idaas.kic.structures;
 
-public class AuditMessage {
-
-    public static final String[] DB_Integration_PERSISTABLE_FIELDS = new String[] { "messageprocesseddate",
-            "messageprocessedtime", "processingtype", "industrystd", "component", "messagetrigger", "processname",
-    "auditdetails", "camelID", "exchangeID", "internalMsgID", "bodyData"};
-
-    public static final String[] DB_AppIntegration_PERSISTABLE_FIELDS = new String[] { "messageprocesseddate",
-            "messageprocessedtime", "processingtype", "industrystd", "component", "messagetrigger", "processname",
-            "auditdetails", "camelID", "exchangeID", "internalMsgID", "bodyData","errorID","errorData","transactionCount",
-            "requestType","transactionDirection"};
+public class AppIntegrationAuditMessage {
 
     private String messageprocesseddate;
     private String messageprocessedtime;

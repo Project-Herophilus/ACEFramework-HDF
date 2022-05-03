@@ -1,5 +1,4 @@
 package io.connectedhealth_idaas.kic;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -31,14 +30,14 @@ public class DataSourceConfiguration {
         DataSource dataSource = dataSourceBuilder.build();
 
         if (config.isCreateDbTable()) {
-            String fields = String.join(" VARCHAR(256), ", AuditMessage.DB_Integration_PERSISTABLE_FIELDS) + " VARCHAR(256)";
+          /*  String fields = String.join(" VARCHAR(256), ", AuditMessage.DB_Integration_PERSISTABLE_FIELDS) + " VARCHAR(256)";
 
             try (Statement statement = dataSource.getConnection().createStatement()) {
                 statement.execute("CREATE TABLE IF NOT EXISTS " + config.getdbIntegrationTableName() + "(" +
                         fields + ")");
             } catch (SQLException e) {
                 throw new RuntimeException("Failed to create db table", e);
-            }
+            }*/
         }
 
         return dataSource;
