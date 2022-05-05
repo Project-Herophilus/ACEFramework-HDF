@@ -31,7 +31,7 @@ public class AppIntegrationAuditMessage {
     private String bodyData;
     private String errorID;
     private String errorData;
-    private String transactionCount;
+    private Integer transactionCount;
     private String requestType;
     private String transactionDirection;
 
@@ -147,11 +147,11 @@ public class AppIntegrationAuditMessage {
         this.errorData = errorData;
     }
 
-    public String getTransactionCount() {
+    public Integer getTransactionCount() {
         return transactionCount;
     }
 
-    public void setTransactionCount(String transactionCount) {
+    public void setTransactionCount(Integer transactionCount) {
         this.transactionCount = transactionCount;
     }
 
