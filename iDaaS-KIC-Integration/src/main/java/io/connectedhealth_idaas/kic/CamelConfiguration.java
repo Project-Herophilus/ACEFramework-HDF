@@ -76,70 +76,69 @@ public class CamelConfiguration extends RouteBuilder {
         // Define the implementing component - and accept the default host and port
         //restConfiguration().component("servlet").host("0.0.0.0").port(String.valueOf(simple("{{server.port}}")));
 
-        // Endpoints for direct auditing processing
-        // Integration Based Auditing
         /*
-         *
-         *   Simple language reference
-         *   https://camel.apache.org/components/latest/languages/simple-language.html
+         * Direct connections for processing needs
          *
          */
+        // Data Integration
         from("direct:auditing")
-                .routeId("iDaaS-DataIntegration-KIC")
-                .setHeader("messageprocesseddate").simple("${date:now:yyyy-MM-dd}")
-                .setHeader("messageprocessedtime").simple("${date:now:HH:mm:ss:SSS}")
-                .setHeader("processingtype").exchangeProperty("processingtype")
-                .setHeader("industrystd").exchangeProperty("industrystd")
-                .setHeader("component").exchangeProperty("componentname")
-                .setHeader("messagetrigger").exchangeProperty("messagetrigger")
-                .setHeader("processname").exchangeProperty("processname")
-                .setHeader("auditdetails").exchangeProperty("auditdetails")
-                .setHeader("camelID").exchangeProperty("camelID")
-                .setHeader("exchangeID").exchangeProperty("exchangeID")
-                .setHeader("internalMsgID").exchangeProperty("internalMsgID")
-                .setHeader("bodyData").exchangeProperty("bodyData")
-                .convertBodyTo(String.class).to(getKafkaTopicUri("{{idaas.integrationTopic}}"));
-
+            .routeId("iDaaS-DataIntegration-KIC")
+            .setHeader("messageprocesseddate").simple("${date:now:yyyy-MM-dd}")
+            .setHeader("messageprocessedtime").simple("${date:now:HH:mm:ss:SSS}")
+            .setHeader("processingtype").exchangeProperty("processingtype")
+            .setHeader("industrystd").exchangeProperty("industrystd")
+            .setHeader("component").exchangeProperty("componentname")
+            .setHeader("messagetrigger").exchangeProperty("messagetrigger")
+            .setHeader("processname").exchangeProperty("processname")
+            .setHeader("auditdetails").exchangeProperty("auditdetails")
+            .setHeader("camelID").exchangeProperty("camelID")
+            .setHeader("exchangeID").exchangeProperty("exchangeID")
+            .setHeader("internalMsgID").exchangeProperty("internalMsgID")
+            .setHeader("bodyData").exchangeProperty("bodyData")
+            .convertBodyTo(String.class).to(getKafkaTopicUri("{{idaas.integrationTopic}}"));
         // Application-API requests response style auditing
         from("direct:transactionauditing")
-                .routeId("iDaaS-AppIntegration-KIC")
-                .setHeader("messageprocesseddate").simple("${date:now:yyyy-MM-dd}")
-                .setHeader("messageprocessedtime").simple("${date:now:HH:mm:ss:SSS}")
-                .setHeader("processingtype").exchangeProperty("processingtype")
-                .setHeader("industrystd").exchangeProperty("industrystd")
-                .setHeader("messagetrigger").exchangeProperty("messagetrigger")
-                .setHeader("component").exchangeProperty("componentname")
-                .setHeader("processname").exchangeProperty("processname")
-                .setHeader("camelID").exchangeProperty("camelID")
-                .setHeader("exchangeID").exchangeProperty("exchangeID")
-                .setHeader("internalMsgID").exchangeProperty("internalMsgID")
-                .setHeader("bodyData").exchangeProperty("bodyData")
-                .setHeader("errorID").exchangeProperty("errorID")
-                .setHeader("errorData").exchangeProperty("errorData")
-                .setHeader("transactionCount").exchangeProperty("transactionCount")
-                .setHeader("requestType").exchangeProperty("requestType")
-                .setHeader("transactionDirection").exchangeProperty("transactionDirection")
-                .convertBodyTo(String.class).to(getKafkaTopicUri("{{idaas.appintegrationTopic}}"));
-
-        /*
-         *  Logging
-         */
+            .routeId("iDaaS-AppIntegration-KIC")
+            .setHeader("messageprocesseddate").simple("${date:now:yyyy-MM-dd}")
+            .setHeader("messageprocessedtime").simple("${date:now:HH:mm:ss:SSS}")
+            .setHeader("processingtype").exchangeProperty("processingtype")
+            .setHeader("industrystd").exchangeProperty("industrystd")
+            .setHeader("messagetrigger").exchangeProperty("messagetrigger")
+            .setHeader("component").exchangeProperty("componentname")
+            .setHeader("processname").exchangeProperty("processname")
+            .setHeader("camelID").exchangeProperty("camelID")
+            .setHeader("exchangeID").exchangeProperty("exchangeID")
+            .setHeader("internalMsgID").exchangeProperty("internalMsgID")
+            .setHeader("bodyData").exchangeProperty("bodyData")
+            .setHeader("errorID").exchangeProperty("errorID")
+            .setHeader("errorData").exchangeProperty("errorData")
+            .setHeader("transactionCount").exchangeProperty("transactionCount")
+            .setHeader("requestType").exchangeProperty("requestType")
+            .setHeader("transactionDirection").exchangeProperty("transactionDirection")
+            .convertBodyTo(String.class).to(getKafkaTopicUri("{{idaas.appintegrationTopic}}"));
+        // Logging
         from("direct:logging")
                 .routeId("logging")
                 .log(LoggingLevel.INFO, log, "Logged Message: [${body}]")
         ;
 
-        // Servlet - External Audit Endpoint
-        from("servlet://KIC-Auditing-EndPoint")
+        /*
+         *  Servlets - External Audit Endpoint
+         */
+        // Data Integration
+        from("servlet://KIC-IntegrationAuditing-EndPoint")
                 .routeId("KIC-IntegrationAuditing-EndPoint")
                 .convertBodyTo(String.class)
                 .wireTap("direct:auditing");
-        //Servlet - External Audit Endpoint
+        // Application Integration
         from("servlet://KIC-ApplicationAuditing-EndPoint")
                 .routeId("KIC-ApplicationAuditing-EndPoint")
                 .convertBodyTo(String.class)
                 .wireTap("direct:transactionauditing");
-        // Servlet - Testing EndPoints
+        /*
+         * Servlet - Testing EndPoints
+         */
+        // Data Integration
         from("servlet://Testing-KIC-DataIntegrationAuditing-EndPoint")
                 .routeId("Testing-KIC-IntegrationAuditing-EndPoint")
                 .convertBodyTo(String.class)
@@ -156,7 +155,7 @@ public class CamelConfiguration extends RouteBuilder {
                 .setProperty("bodyData").simple("${body}")
                 .setProperty("auditdetails").constant("Data Integration KIC message received")
                 .wireTap("direct:auditing");
-
+        // Application Integration
         from("servlet://Testing-KIC-ApplicationAuditing-EndPoint")
                 .routeId("Testing-KIC-ApplicationAuditing-EndPoint")
                 .setProperty("processingtype").constant("app-data")
@@ -178,8 +177,10 @@ public class CamelConfiguration extends RouteBuilder {
                 .convertBodyTo(String.class)
                 .wireTap("direct:transactionauditing");
 
-
-        // KafkaTopic processing for Data Integration Audit Processing
+        /*
+         *   Kafka Topic Processing to Data/File Tier
+         */
+        // Data Integration Kafka Topic Processing to Data Tier
         from(getKafkaTopicUri(config.getIntegrationTopic()))
              .routeId("KIC-DataIntegration-Topic")
              //.log(LoggingLevel.INFO, log, "Message Pre Remove Headers: [${body}]")
@@ -188,16 +189,39 @@ public class CamelConfiguration extends RouteBuilder {
                 .to("file:" + config.auditDir_DataIntegrationAuditLocation())
              .choice().when(simple("{{idaas.storeInDb_DataIntegrationAudit}}"))
                  //.log(LoggingLevel.INFO, log, "Data Integration Message: [${body}]")
-                //.log(LoggingLevel.INFO, log, "Data Integration Message: [${body.camelid}]")
+                 //.log(LoggingLevel.INFO, log, "Data Integration Message: [${body.camelid}]")
                 .unmarshal(new JacksonDataFormat(DataIntegrationAuditMessage.class))
-                .to("sql:insert into intgrtn_insight (messagedate, processingtype, industrystd," +
+                .to("sql:insert into data_intgrtn_insight (messagedate, processingtype, industrystd," +
                         "component, messagetrigger, processname, auditdetails, exchangeid, " +
                         "bodydata, messagetime, camelid) " +
                         "values (:#${body.messageprocesseddate},:#${body.processingtype}" +
                         ",:#${body.industrystd},:#${body.component},:#${body.messagetrigger},:#${body.processname}" +
                         ",:#${body.auditdetails},:#${body.exchangeID},:#${body.bodyData},:#${body.messageprocessedtime}" +
                         ",:#${body.camelID})")
-                .endChoice();
-   }
+            .endChoice();
+
+        // App Integration Kafka Topic Processing to Data Tier
+        from(getKafkaTopicUri(config.getAppintegrationTopic()))
+             .routeId("KIC-AppIntegration-Topic")
+             //.log(LoggingLevel.INFO, log, "Message Pre Remove Headers: [${body}]")
+             .removeHeader("breadcrumbId").convertBodyTo(String.class)
+             .choice().when(simple("{{idaas.storeInFs_AppIntegrationAudit}}"))
+                .to("file:" + config.auditDir_AppIntegrationAuditLocation())
+             .choice().when(simple("{{idaas.storeInDb_DataIntegrationAudit}}"))
+                //.log(LoggingLevel.INFO, log, "Data Integration Message: [${body}]")
+                //.log(LoggingLevel.INFO, log, "Data Integration Message: [${body.camelid}]")
+                .unmarshal(new JacksonDataFormat(AppIntegrationAuditMessage.class))
+                .to("sql:insert into app_intgrtn_insight (messagedate, processingtype, industrystd," +
+                        "component, messagetrigger, processname, auditdetails, exchangeid, " +
+                        "bodydata, messagetime, camelid,requesttype,errorid,errordata," +
+                        "transactioncount,transactiondirection) " +
+                        "values (:#${body.messageprocesseddate},:#${body.processingtype}" +
+                        ",:#${body.industrystd},:#${body.component},:#${body.messagetrigger},:#${body.processname}" +
+                        ",:#${body.auditdetails},:#${body.exchangeID},:#${body.bodyData},:#${body.messageprocessedtime}" +
+                        ",:#${body.camelID},:#${body.requestType},:#${body.errorID}" +
+                        ",:#${body.errorData},:#${body.transactionCount},:#${body.transactionDirection})")
+              .endChoice();
+
+    }
 
 }
