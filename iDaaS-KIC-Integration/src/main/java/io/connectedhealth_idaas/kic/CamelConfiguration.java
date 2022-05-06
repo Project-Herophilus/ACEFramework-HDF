@@ -190,14 +190,14 @@ public class CamelConfiguration extends RouteBuilder {
              .choice().when(simple("{{idaas.storeInDb_DataIntegrationAudit}}"))
                  //.log(LoggingLevel.INFO, log, "Data Integration Message: [${body}]")
                  //.log(LoggingLevel.INFO, log, "Data Integration Message: [${body.camelid}]")
-                .unmarshal(new JacksonDataFormat(DataIntegrationAuditMessage.class))
+             /*   .unmarshal(new JacksonDataFormat(DataIntegrationAuditMessage.class))
                 .to("sql:insert into data_intgrtn_insight (messagedate, processingtype, industrystd," +
                         "component, messagetrigger, processname, auditdetails, exchangeid, " +
                         "bodydata, messagetime, camelid) " +
                         "values (:#${body.messageprocesseddate},:#${body.processingtype}" +
                         ",:#${body.industrystd},:#${body.component},:#${body.messagetrigger},:#${body.processname}" +
                         ",:#${body.auditdetails},:#${body.exchangeID},:#${body.bodyData},:#${body.messageprocessedtime}" +
-                        ",:#${body.camelID})")
+                        ",:#${body.camelID})")*/
             .endChoice();
 
         // App Integration Kafka Topic Processing to Data Tier
@@ -210,7 +210,7 @@ public class CamelConfiguration extends RouteBuilder {
              .choice().when(simple("{{idaas.storeInDb_DataIntegrationAudit}}"))
                 //.log(LoggingLevel.INFO, log, "Data Integration Message: [${body}]")
                 //.log(LoggingLevel.INFO, log, "Data Integration Message: [${body.camelid}]")
-                .unmarshal(new JacksonDataFormat(AppIntegrationAuditMessage.class))
+               /* .unmarshal(new JacksonDataFormat(AppIntegrationAuditMessage.class))
                 .to("sql:insert into app_intgrtn_insight (messagedate, processingtype, industrystd," +
                         "component, messagetrigger, processname, auditdetails, exchangeid, " +
                         "bodydata, messagetime, camelid,requesttype,errorid,errordata," +
@@ -219,7 +219,7 @@ public class CamelConfiguration extends RouteBuilder {
                         ",:#${body.industrystd},:#${body.component},:#${body.messagetrigger},:#${body.processname}" +
                         ",:#${body.auditdetails},:#${body.exchangeID},:#${body.bodyData},:#${body.messageprocessedtime}" +
                         ",:#${body.camelID},:#${body.requestType},:#${body.errorID}" +
-                        ",:#${body.errorData},:#${body.transactionCount},:#${body.transactionDirection})")
+                        ",:#${body.errorData},:#${body.transactionCount},:#${body.transactionDirection})")*/
               .endChoice();
 
     }

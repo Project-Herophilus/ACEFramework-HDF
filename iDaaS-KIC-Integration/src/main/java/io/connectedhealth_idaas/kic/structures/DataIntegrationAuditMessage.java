@@ -15,6 +15,9 @@
  */
 package io.connectedhealth_idaas.kic.structures;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class DataIntegrationAuditMessage {
 
     private String messageprocesseddate;
@@ -34,8 +37,10 @@ public class DataIntegrationAuditMessage {
     private String transactionCount;
     private String requestType;
     private String transactionDirection;
+    // Added to resolve issue
+    private String resourceType;
 
-    public String getMessageprocesseddate() {
+        public String getMessageprocesseddate() {
         return messageprocesseddate;
     }
 
@@ -169,5 +174,13 @@ public class DataIntegrationAuditMessage {
 
     public void setTransactionDirection(String transactionDirection) {
         this.transactionDirection = transactionDirection;
+    }
+
+    public String getResourceType() {
+        return resourceType;
+    }
+
+    public void setResourceType(String resourceType) {
+        this.resourceType = resourceType;
     }
 }
