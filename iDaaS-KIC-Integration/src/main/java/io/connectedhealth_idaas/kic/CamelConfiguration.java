@@ -29,14 +29,14 @@ import org.apache.camel.component.kafka.KafkaComponent;
 import org.apache.camel.component.kafka.KafkaEndpoint;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.apache.camel.component.servlet.CamelHttpTransportServlet;
-//import javax.sql.DataSource;
-import org.apache.camel.component.sql.SqlComponent;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-// Custom Parser Library
-import io.connectedhealth_idaas.kic.structures.*;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.camel.component.sql.SqlComponent;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+// Custom Structures and Processors
+import io.connectedhealth_idaas.kic.structures.*;
+import io.connectedhealth_idaas.kic.processor.*;
+
 
 @Component
 public class CamelConfiguration extends RouteBuilder {
@@ -184,12 +184,18 @@ public class CamelConfiguration extends RouteBuilder {
         from(getKafkaTopicUri(config.getIntegrationTopic()))
              .routeId("KIC-DataIntegration-Topic")
              //.log(LoggingLevel.INFO, log, "Message Pre Remove Headers: [${body}]")
-             .removeHeader("breadcrumbId").convertBodyTo(String.class)
+
              .choice().when(simple("{{idaas.storeInFs_DataIntegrationAudit}}"))
                 .to("file:" + config.auditDir_DataIntegrationAuditLocation())
              .choice().when(simple("{{idaas.storeInDb_DataIntegrationAudit}}"))
-                 //.log(LoggingLevel.INFO, log, "Data Integration Message: [${body}]")
-                 //.log(LoggingLevel.INFO, log, "Data Integration Message: [${body.camelid}]")
+                //.log(LoggingLevel.INFO, log, "Data Integration Message: [${body}]")
+                //.removeHeader("breadcrumbId").convertBodyTo(String.class)
+                //.process("auditDataIntegrationProcessor")
+                .process(new AuditDataIntegrationProcessor())
+                //.to("file:" + config.auditDir_DataIntegrationAuditLocation())
+                .log(LoggingLevel.INFO, log, "Data Integration Message: [${body}]")
+                //.log(LoggingLevel.INFO, log, "Data Integration Message: [${body.camelID}]")
+                //.log(LoggingLevel.INFO, log, "Data Integration Message: [${body.processingtype}]")
              /*   .unmarshal(new JacksonDataFormat(DataIntegrationAuditMessage.class))
                 .to("sql:insert into data_intgrtn_insight (messagedate, processingtype, industrystd," +
                         "component, messagetrigger, processname, auditdetails, exchangeid, " +
