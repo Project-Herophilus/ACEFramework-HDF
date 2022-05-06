@@ -192,10 +192,10 @@ public class CamelConfiguration extends RouteBuilder {
                 //.removeHeader("breadcrumbId").convertBodyTo(String.class)
                 //.process("auditDataIntegrationProcessor")
                 .process(new AuditDataIntegrationProcessor())
-                //.to("file:" + config.auditDir_DataIntegrationAuditLocation())
-                .log(LoggingLevel.INFO, log, "Data Integration Message: [${body}]")
-                //.log(LoggingLevel.INFO, log, "Data Integration Message: [${body.camelID}]")
-                //.log(LoggingLevel.INFO, log, "Data Integration Message: [${body.processingtype}]")
+                //.unmarshal().json(JsonLibrary.Jackson, DataIntegrationAuditMessage.class)
+                //.log(LoggingLevel.INFO, log, "Data Integration Message: [${body}]")
+                .log(LoggingLevel.INFO, log, "Data Integration Message: [${body.industrystd.toString()}]")
+                .log(LoggingLevel.INFO, log, "Data Integration Message: [${body.processingtype.toString()}]")
              /*   .unmarshal(new JacksonDataFormat(DataIntegrationAuditMessage.class))
                 .to("sql:insert into data_intgrtn_insight (messagedate, processingtype, industrystd," +
                         "component, messagetrigger, processname, auditdetails, exchangeid, " +

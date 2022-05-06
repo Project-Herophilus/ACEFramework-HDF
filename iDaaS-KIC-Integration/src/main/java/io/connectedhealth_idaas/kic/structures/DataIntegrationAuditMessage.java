@@ -16,6 +16,7 @@
 package io.connectedhealth_idaas.kic.structures;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DataIntegrationAuditMessage {
@@ -152,6 +153,10 @@ public class DataIntegrationAuditMessage {
 
     public void setBodyData(String bodyData) {
         this.bodyData = bodyData;
+    }
+
+    public String toString() {
+        return ReflectionToStringBuilder.toString(this);
     }
 
 }

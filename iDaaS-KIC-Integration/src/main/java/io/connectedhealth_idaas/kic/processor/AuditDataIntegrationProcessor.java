@@ -17,6 +17,7 @@ package io.connectedhealth_idaas.kic.processor;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -52,11 +53,7 @@ public class AuditDataIntegrationProcessor implements Processor {
         message.setProcessingtype(getHeader(headers, "processingtype"));
         message.setProcessname(getHeader(headers, "processname"));
 
-        //log.debug("CamelID: "+message.getCamelID().toString());
-        //log.debug("Component: "+message.getComponent().toString());
-        //log.debug("Message Date: "+message.getMessageprocesseddate().toString());
-        //log.debug("Message Time: "+message.getMessageprocessedtime().toString());
-        exchange.getOut().setBody(message);
+        exchange.getOut().setBody(message.toString());
     }
 
     private String getHeader(Map<String, Object> headers, String name) {
@@ -69,4 +66,6 @@ public class AuditDataIntegrationProcessor implements Processor {
             return null;
         }
     }
+
+
 }
