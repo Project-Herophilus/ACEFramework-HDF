@@ -29,9 +29,9 @@ public class DataIntegrationAuditMessage {
     private String messagetrigger;
     private String processname;
     private String auditdetails;
-    private String camelid;
-    private String exchangeid;
-    private String internalmsgid;
+    private String camelID;
+    private String exchangeID;
+    private String internalMsgID;
     private String bodyData;
 
    public String getMessageprocesseddate() {
@@ -98,7 +98,7 @@ public class DataIntegrationAuditMessage {
         this.auditdetails = auditdetails;
     }
 
-   /* public String getCamelID() {
+   public String getCamelID() {
         return camelID;
     }
 
@@ -120,32 +120,6 @@ public class DataIntegrationAuditMessage {
     public void setInternalMsgID(String internalMsgID) {
         this.internalMsgID = internalMsgID;
     }
-  */
-   public String getCamelid() {
-        return camelid;
-    }
-
-    public void setCamelid(String camelid) {
-        this.camelid = camelid;
-    }
-
-    public String getExchangeid(String exchangeid) {
-        return this.exchangeid;
-    }
-
-    public void setExchangeid(String exchangeid) {
-        this.exchangeid = exchangeid;
-    }
-
-    public String getInternalmsgid() {
-        return internalmsgid;
-    }
-
-    public void setInternalmsgid(String internalmsgid) {
-        this.internalmsgid = internalmsgid;
-    }
-
-
 
       public String getBodyData() {
         return bodyData;

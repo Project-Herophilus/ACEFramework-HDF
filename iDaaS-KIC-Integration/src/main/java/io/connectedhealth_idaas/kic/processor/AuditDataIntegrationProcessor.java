@@ -37,23 +37,25 @@ public class AuditDataIntegrationProcessor implements Processor {
     public void process(Exchange exchange) {
         DataIntegrationAuditMessage message = new DataIntegrationAuditMessage();
         Map<String, Object> headers = exchange.getIn().getHeaders();
-
         //log.debug("Headers: "+headers.toString());
-
         message.setMessageprocesseddate(getHeader(headers, "messageprocesseddate"));
         message.setAuditdetails(getHeader(headers, "auditdetails"));
         message.setBodyData(getHeader(headers, "bodyData"));
-        message.setCamelid(getHeader(headers, "camelID"));
+        message.setCamelID(getHeader(headers, "camelID"));
         message.setComponent(getHeader(headers, "component"));
-        message.setExchangeid(getHeader(headers, "exchangeid"));
+        message.setExchangeID(getHeader(headers, "exchangeid"));
         message.setIndustrystd(getHeader(headers, "industrystd"));
-        message.setInternalmsgid(getHeader(headers, "internalMsgID"));
+        message.setInternalMsgID(getHeader(headers, "internalMsgID"));
         message.setMessageprocessedtime(getHeader(headers, "messageprocessedtime"));
         message.setMessagetrigger(getHeader(headers, "messagetrigger"));
         message.setProcessingtype(getHeader(headers, "processingtype"));
         message.setProcessname(getHeader(headers, "processname"));
 
-        exchange.getOut().setBody(message.toString());
+        // toString() gives us a string object
+        //exchange.getOut().setBody(message.toString());
+        //exchange.getOut().setBody(message);
+        exchange.getMessage().setBody(message);
+
     }
 
     private String getHeader(Map<String, Object> headers, String name) {
