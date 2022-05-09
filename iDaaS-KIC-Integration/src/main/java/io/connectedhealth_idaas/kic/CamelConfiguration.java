@@ -29,14 +29,14 @@ import org.apache.camel.component.kafka.KafkaComponent;
 import org.apache.camel.component.kafka.KafkaEndpoint;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.apache.camel.component.servlet.CamelHttpTransportServlet;
-//import javax.sql.DataSource;
-import org.apache.camel.component.sql.SqlComponent;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-// Custom Parser Library
-import io.connectedhealth_idaas.kic.structures.*;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.camel.component.sql.SqlComponent;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+// Custom Structures and Processors
+import io.connectedhealth_idaas.kic.structures.*;
+import io.connectedhealth_idaas.kic.processor.*;
+
 
 @Component
 public class CamelConfiguration extends RouteBuilder {
@@ -184,20 +184,33 @@ public class CamelConfiguration extends RouteBuilder {
         from(getKafkaTopicUri(config.getIntegrationTopic()))
              .routeId("KIC-DataIntegration-Topic")
              //.log(LoggingLevel.INFO, log, "Message Pre Remove Headers: [${body}]")
-             .removeHeader("breadcrumbId").convertBodyTo(String.class)
+
              .choice().when(simple("{{idaas.storeInFs_DataIntegrationAudit}}"))
                 .to("file:" + config.auditDir_DataIntegrationAuditLocation())
              .choice().when(simple("{{idaas.storeInDb_DataIntegrationAudit}}"))
-                 //.log(LoggingLevel.INFO, log, "Data Integration Message: [${body}]")
-                 //.log(LoggingLevel.INFO, log, "Data Integration Message: [${body.camelid}]")
-             /*   .unmarshal(new JacksonDataFormat(DataIntegrationAuditMessage.class))
+                //.log(LoggingLevel.INFO, log, "Data Integration Starting Message: [${body}]")
+                .removeHeader("breadcrumbId").convertBodyTo(String.class)
+                //.process("auditDataIntegrationProcessor")
+                .process(new AuditDataIntegrationProcessor())
+                //.unmarshal().json(JsonLibrary.Jackson, DataIntegrationAuditMessage.class)
+                //.log(LoggingLevel.INFO, log, "Data Integration Message: [${body}]")
+                .log(LoggingLevel.INFO, log, "Industry Std: [${body.industrystd}]")
+                .log(LoggingLevel.INFO, log, "Processing Type: [${body.processingtype}]")
+                .log(LoggingLevel.INFO, log, "Component: [${body.component}]")
+                .log(LoggingLevel.INFO, log, "Message Trigger: [${body.messagetrigger}]")
+                .log(LoggingLevel.INFO, log, "Message Date: [${body.messageprocesseddate}]")
+                .log(LoggingLevel.INFO, log, "Message Time: [${body.messageprocessedtime}]")
+                .log(LoggingLevel.INFO, log, "Process Name: [${body.processname}]")
+                .log(LoggingLevel.INFO, log, "Exchange ID: [${body.exchangeID}]")
+                .log(LoggingLevel.INFO, log, "Camel ID: [${body.camelID}]")
+                .log(LoggingLevel.INFO, log, "Audit Details: [${body.auditdetails}]")
                 .to("sql:insert into data_intgrtn_insight (messagedate, processingtype, industrystd," +
                         "component, messagetrigger, processname, auditdetails, exchangeid, " +
                         "bodydata, messagetime, camelid) " +
                         "values (:#${body.messageprocesseddate},:#${body.processingtype}" +
                         ",:#${body.industrystd},:#${body.component},:#${body.messagetrigger},:#${body.processname}" +
                         ",:#${body.auditdetails},:#${body.exchangeID},:#${body.bodyData},:#${body.messageprocessedtime}" +
-                        ",:#${body.camelID})")*/
+                        ",:#${body.camelID})")
             .endChoice();
 
         // App Integration Kafka Topic Processing to Data Tier

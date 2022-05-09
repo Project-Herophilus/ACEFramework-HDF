@@ -16,6 +16,7 @@
 package io.connectedhealth_idaas.kic.structures;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DataIntegrationAuditMessage {
@@ -32,15 +33,8 @@ public class DataIntegrationAuditMessage {
     private String exchangeID;
     private String internalMsgID;
     private String bodyData;
-    private String errorID;
-    private String errorData;
-    private String transactionCount;
-    private String requestType;
-    private String transactionDirection;
-    // Added to resolve issue
-    private String resourceType;
 
-        public String getMessageprocesseddate() {
+   public String getMessageprocesseddate() {
         return messageprocesseddate;
     }
 
@@ -104,7 +98,7 @@ public class DataIntegrationAuditMessage {
         this.auditdetails = auditdetails;
     }
 
-    public String getCamelID() {
+   public String getCamelID() {
         return camelID;
     }
 
@@ -119,16 +113,15 @@ public class DataIntegrationAuditMessage {
     public void setExchangeID(String exchangeID) {
         this.exchangeID = exchangeID;
     }
-
-    public String getInternalMsgID() {
-        return internalMsgID;
-    }
+   public String getInternalMsgID() {
+       return internalMsgID;
+   }
 
     public void setInternalMsgID(String internalMsgID) {
         this.internalMsgID = internalMsgID;
     }
 
-    public String getBodyData() {
+      public String getBodyData() {
         return bodyData;
     }
 
@@ -136,51 +129,8 @@ public class DataIntegrationAuditMessage {
         this.bodyData = bodyData;
     }
 
-    public String getErrorID() {
-        return errorID;
+    public String toString() {
+        return ReflectionToStringBuilder.toString(this);
     }
 
-    public void setErrorID(String errorID) {
-        this.errorID = errorID;
-    }
-
-    public String getErrorData() {
-        return errorData;
-    }
-
-    public void setErrorData(String errorData) {
-        this.errorData = errorData;
-    }
-
-    public String getTransactionCount() {
-        return transactionCount;
-    }
-
-    public void setTransactionCount(String transactionCount) {
-        this.transactionCount = transactionCount;
-    }
-
-    public String getRequestType() {
-        return requestType;
-    }
-
-    public void setRequestType(String requestType) {
-        this.requestType = requestType;
-    }
-
-    public String getTransactionDirection() {
-        return transactionDirection;
-    }
-
-    public void setTransactionDirection(String transactionDirection) {
-        this.transactionDirection = transactionDirection;
-    }
-
-    public String getResourceType() {
-        return resourceType;
-    }
-
-    public void setResourceType(String resourceType) {
-        this.resourceType = resourceType;
-    }
 }
