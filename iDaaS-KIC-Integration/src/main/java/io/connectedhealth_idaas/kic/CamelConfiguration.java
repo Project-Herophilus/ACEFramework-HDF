@@ -202,15 +202,18 @@ public class CamelConfiguration extends RouteBuilder {
                 .log(LoggingLevel.INFO, log, "Message Time: [${body.messageprocessedtime}]")
                 .log(LoggingLevel.INFO, log, "Process Name: [${body.processname}]")
                 .log(LoggingLevel.INFO, log, "Exchange ID: [${body.exchangeID}]")
-                .log(LoggingLevel.INFO, log, "Camel ID: [${body.camelID}]")
                 .log(LoggingLevel.INFO, log, "Audit Details: [${body.auditdetails}]")
+                .log(LoggingLevel.INFO, log, "ID: [${body.internalMsgID}]")
+                // Header Record
+                // Detailed Record
+                // Data Detail
                 .to("sql:insert into data_intgrtn_insight (messagedate, processingtype, industrystd," +
                         "component, messagetrigger, processname, auditdetails, exchangeid, " +
-                        "bodydata, messagetime, camelid) " +
+                        "bodydata, messagetime, internalmsgid) " +
                         "values (:#${body.messageprocesseddate},:#${body.processingtype}" +
                         ",:#${body.industrystd},:#${body.component},:#${body.messagetrigger},:#${body.processname}" +
                         ",:#${body.auditdetails},:#${body.exchangeID},:#${body.bodyData},:#${body.messageprocessedtime}" +
-                        ",:#${body.camelID})")
+                        ",:#${body.internalMsgID})")
             .endChoice();
 
         // App Integration Kafka Topic Processing to Data Tier
