@@ -50,11 +50,9 @@ jobs:
         maven-repo-server-id: github
     - name: Deploy Red Hat Artifacts
       run: |
-        echo "MAVEN_REPO_SERVER_ID: $MAVEN_REPO_SERVER_ID"
-        echo "GITHUB_TOKEN: $GITHUB_TOKEN"
-        echo "MAVEN_REPO_SERVER_USERNAME: $MAVEN_REPO_SERVER_USERNAME"
-        echo "MAVEN_REPO_SERVER_PASSWORD: $MAVEN_REPO_SERVER_PASSWORD"
-        sudo mvn -s .github/workflows/settings.xml -B deploy -pl iDaaS-KIC-Integration
+        ls -la
+        ls -la .github/workflows/settings.xml
+        sudo mvn -X -s .github/workflows/settings.xml -B deploy -pl iDaaS-KIC-Integration
       env:
         GITHUB_TOKEN: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
         MAVEN_REPO_SERVER_ID: github
