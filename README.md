@@ -4,7 +4,7 @@ of the iDaaS Components. Additionally, it has been extended to support general a
 
 Here is a generic visual to show how iDaaS-KIC can, and is, used today:
 
-![iDaaS Dataflow](https://github.com/Project-Herophilus/Project-Herophilus-Assets/blob/main/Platform/Images/iDAAS-Platform/iDaaS-KIC-General.png)
+![iDaaS Dataflow](https://github.com/Project-Herophilus/Project-Herophilus-Assets/blob/main/images/iDaaS-Platform/iDaaS-KIC-General.png)
 
 # iDaaS-KIC Modules
 Here are the modules that make up iDaaS-KIC.
