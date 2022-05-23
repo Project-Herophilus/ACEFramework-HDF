@@ -9,14 +9,6 @@ xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
             <id>${env.MAVEN_REPO_SERVER_ID}</id>
             <username>${env.MAVEN_REPO_SERVER_USERNAME}</username>
             <password>${env.MAVEN_REPO_SERVER_PASSWORD}</password>
-            <configuration>
-                <httpHeaders>
-                  <property>
-                    <name>Authorization</name>
-                    <value>Bearer ${env.MAVEN_REPO_SERVER_PASSWORD}</value>
-                  </property>
-                </httpHeaders>
-              </configuration>
         </server>
     </servers>
     <profiles>

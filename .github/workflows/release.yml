@@ -28,11 +28,25 @@ jobs:
     - name: Cache local Maven repository
       uses: actions/cache@v3
       with:
-        path: /tmp
+        path: /root/.m2
         key: ${{ runner.os }}-maven
         restore-keys: |
           ${{ runner.os }}-maven
-    - name: Java Maven release Upstream
+    - name: Deploy Artifacts
+      run: |
+        cp .github/workflows/settings.xml /tmp/settings.xml
+        sed -i "s/\${env.MAVEN_REPO_SERVER_ID}/$MAVEN_REPO_SERVER_ID/" /tmp/settings.xml
+        sed -i "s/\${env.MAVEN_REPO_SERVER_USERNAME}/$MAVEN_REPO_SERVER_USERNAME/" /tmp/settings.xml
+        sed -i "s/\${env.MAVEN_REPO_SERVER_PASSWORD}/$MAVEN_REPO_SERVER_PASSWORD/" /tmp/settings.xml
+        cat /tmp/settings.xml
+        sudo mvn -X -s /tmp/settings.xml -gs /tmp/settings.xml -B deploy -pl iDaaS-KIC-Integration
+        sudo mvn -X -s /tmp/settings.xml -gs /tmp/settings.xml -B deploy -Predhat -pl iDaaS-KIC-Integration
+      env:
+        GITHUB_TOKEN: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
+        MAVEN_REPO_SERVER_ID: github
+        MAVEN_REPO_SERVER_USERNAME: jayfray12
+        MAVEN_REPO_SERVER_PASSWORD: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
+    - name: Java Maven release
       uses: qcastel/github-actions-maven-release@v1.12.16
       env:
         JAVA_HOME: /usr/lib/jvm/java-11-openjdk/
@@ -49,19 +63,4 @@ jobs:
         maven-args: "-X -Dmaven.deploy.skip=true"
         maven-repo-server-id: github
         m2-home-folder: '/tmp'
-    - name: Deploy Red Hat Artifacts
-      run: |
-        ls -la
-        ls -la .github/workflows/settings.xml
-        ls -la /tmp/
-        cp .github/workflows/settings.xml /tmp/settings.xml
-        sed -i "s/\${env.MAVEN_REPO_SERVER_ID}/$MAVEN_REPO_SERVER_ID/" /tmp/settings.xml
-        sed -i "s/\${env.MAVEN_REPO_SERVER_USERNAME}/$MAVEN_REPO_SERVER_USERNAME/" /tmp/settings.xml
-        sed -i "s/\${env.MAVEN_REPO_SERVER_PASSWORD}/$MAVEN_REPO_SERVER_PASSWORD/" /tmp/settings.xml
-        cat /tmp/settings.xml
-        sudo mvn -X -s /tmp/settings.xml -gs /tmp/settings.xml -B deploy -pl iDaaS-KIC-Integration
-      env:
-        GITHUB_TOKEN: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
-        MAVEN_REPO_SERVER_ID: github
-        MAVEN_REPO_SERVER_USERNAME: jayfray12
-        MAVEN_REPO_SERVER_PASSWORD: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
+    
