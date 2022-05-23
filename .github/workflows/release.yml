@@ -25,6 +25,11 @@ jobs:
       uses: actions/checkout@v2
       with:
         token: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
+    - name: Debug 1
+      run: |
+        whoami
+        ls -la 
+        ls -la iDaaS-KIC-Integration
     - name: Java Maven release Upstream
       uses: qcastel/github-actions-maven-release@v1.12.16
       env:
@@ -41,12 +46,17 @@ jobs:
         maven-options: "-s /github/workspace/.github/workflows/settings.xml"
         maven-args: "-Dmaven.deploy.skip=true"
         maven-repo-server-id: github
+    - name: Debug 2
+      run: |
+        whoami
+        ls -la 
+        ls -la iDaaS-KIC-Integration
     - name: Deploy Red Hat Artifacts
       run: |
         whoami
         ls -la 
         ls -la iDaaS-KIC-Integration
-        mvn -s .github/workflows/settings.xml -B deploy -pl iDaaS-KIC-Integration
+        sudo mvn -s .github/workflows/settings.xml -B deploy -pl iDaaS-KIC-Integration
       env:
         GITHUB_TOKEN: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
         MAVEN_REPO_SERVER_ID: github
