@@ -18,7 +18,7 @@
         <repository>
           <id>github</id>
           <name>iDaaS-KIC Packages</name>
-          <url>https://maven.pkg.github.com/Project-Herophilus/iDaaS-KIC</url>
+          <url>https://maven.pkg.github.com/jayfray12/iDaaS-KIC</url>
         </repository>
     </distributionManagement>
 
