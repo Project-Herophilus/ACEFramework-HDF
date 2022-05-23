@@ -8,9 +8,9 @@
     <packaging>pom</packaging>
     
       <scm>
-      <connection>scm:git:https://github.com/Project-Herophilus/iDaaS-KIC.git</connection>
-      <url>https://github.com/Project-Herophilus/iDaaS-KIC</url>
-      <developerConnection>scm:git:https://github.com/Project-Herophilus/iDaaS-KIC</developerConnection>
+      <connection>scm:git:https://github.com/jayfray12/iDaaS-KIC.git</connection>
+      <url>https://github.com/jayfray12/iDaaS-KIC</url>
+      <developerConnection>scm:git:https://github.com/jayfray12/iDaaS-KIC</developerConnection>
       <tag>v1.0.0</tag>
     </scm>
     
@@ -18,7 +18,7 @@
         <repository>
           <id>github</id>
           <name>iDaaS-KIC Packages</name>
-          <url>https://maven.pkg.github.com/Project-Herophilus/iDaaS-KIC</url>
+          <url>https://maven.pkg.github.com/jayfray12/iDaaS-KIC</url>
         </repository>
     </distributionManagement>
 
