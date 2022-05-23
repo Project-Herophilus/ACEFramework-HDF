@@ -52,8 +52,13 @@ jobs:
       run: |
         ls -la
         ls -la .github/workflows/settings.xml
-        cat .github/workflows/settings.xml
-        sudo mvn -X -s .github/workflows/settings.xml -gs .github/workflows/settings.xml -B deploy -pl iDaaS-KIC-Integration
+        ls -la /tmp/.m2/repo
+        cp .github/workflows/settings.xml /tmp/settings.xml
+        sed -i "s/\${env.MAVEN_REPO_SERVER_ID}/$MAVEN_REPO_SERVER_ID/" /tmp/settings.xml
+        sed -i "s/\${env.MAVEN_REPO_SERVER_USERNAME}/$MAVEN_REPO_SERVER_USERNAME/" /tmp/settings.xml
+        sed -i "s/\${env.MAVEN_REPO_SERVER_PASSWORD}/$MAVEN_REPO_SERVER_PASSWORD/" /tmp/settings.xml
+        cat /tmp/settings.xml
+        sudo mvn -X -s /tmp/settings.xml -gs /tmp/settings.xml -B deploy -pl iDaaS-KIC-Integration
       env:
         GITHUB_TOKEN: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
         MAVEN_REPO_SERVER_ID: github
