@@ -43,8 +43,9 @@ jobs:
         maven-repo-server-id: github
     - name: Deploy Red Hat Artifacts
       run: |
+        whoami
         ls -la 
-        ls -la iDaaS-KIC/iDaaS-KIC-Integration
+        ls -la iDaaS-KIC-Integration
         mvn -s .github/workflows/settings.xml -B deploy -pl iDaaS-KIC-Integration
       env:
         GITHUB_TOKEN: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
