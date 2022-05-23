@@ -30,14 +30,14 @@ jobs:
       env:
         JAVA_HOME: /usr/lib/jvm/java-11-openjdk/
         MAVEN_REPO_SERVER_ID: github
-        MAVEN_REPO_SERVER_USERNAME: idaas-bot
+        MAVEN_REPO_SERVER_USERNAME: jayfray12
         MAVEN_REPO_SERVER_PASSWORD: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
       with:
         access-token: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
         release-branch-name: ${{ github.event.inputs.branch }}
         version-major: ${{ github.event.inputs.increment-major }}
         version-minor: ${{ github.event.inputs.increment-minor }}
-        git-release-bot-name: "idaas-bot"
+        git-release-bot-name: "jayfray12"
         maven-options: "-s /github/workspace/.github/workflows/settings.xml"
         maven-args: "-Dmaven.deploy.skip=true"
         maven-repo-server-id: github
@@ -46,5 +46,5 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
         MAVEN_REPO_SERVER_ID: github
-        MAVEN_REPO_SERVER_USERNAME: idaas-bot
+        MAVEN_REPO_SERVER_USERNAME: jayfray12
         MAVEN_REPO_SERVER_PASSWORD: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
