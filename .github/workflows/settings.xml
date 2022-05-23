@@ -7,8 +7,8 @@ xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
         <server>
             <!-- This id must match the distributionManagement section in pom.xml -->
             <id>${env.MAVEN_REPO_SERVER_ID}</id>
-            <username>${env.MAVEN_REPO_SERVER_USERNAME}</username>
-            <password>${env.MAVEN_REPO_SERVER_PASSWORD}</password>
+            <!-- <username>${env.MAVEN_REPO_SERVER_USERNAME}</username>
+            <password>${env.MAVEN_REPO_SERVER_PASSWORD}</password> -->
             <configuration>
                 <httpHeaders>
                   <property>
