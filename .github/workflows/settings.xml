@@ -27,5 +27,5 @@ xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
             </activation>
         </profile>
     </profiles>
-    <localRepository>/tmp/.m2/repo</localRepository>
+    <localRepository>/tmp</localRepository>
 </settings>

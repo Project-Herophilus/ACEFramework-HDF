@@ -28,7 +28,7 @@ jobs:
     - name: Cache local Maven repository
       uses: actions/cache@v3
       with:
-        path: /tmp/.m2/repo
+        path: /tmp
         key: ${{ runner.os }}-maven
         restore-keys: |
           ${{ runner.os }}-maven
@@ -48,11 +48,12 @@ jobs:
         maven-options: "-s /github/workspace/.github/workflows/settings.xml"
         maven-args: "-X -Dmaven.deploy.skip=true"
         maven-repo-server-id: github
+        m2-home-folder: '/tmp'
     - name: Deploy Red Hat Artifacts
       run: |
         ls -la
         ls -la .github/workflows/settings.xml
-        ls -la /tmp/.m2/repo
+        ls -la /tmp/
         cp .github/workflows/settings.xml /tmp/settings.xml
         sed -i "s/\${env.MAVEN_REPO_SERVER_ID}/$MAVEN_REPO_SERVER_ID/" /tmp/settings.xml
         sed -i "s/\${env.MAVEN_REPO_SERVER_USERNAME}/$MAVEN_REPO_SERVER_USERNAME/" /tmp/settings.xml
