@@ -42,7 +42,7 @@ jobs:
         maven-args: "-Dmaven.deploy.skip=true"
         maven-repo-server-id: github
     - name: Deploy Red Hat Artifacts
-      run: mvn -s .github/workflows/settings.xml -B deploy -pl iDaaS-KIC-Integration
+      run: sudo mvn -s .github/workflows/settings.xml -B deploy -pl iDaaS-KIC-Integration
       env:
         GITHUB_TOKEN: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
         MAVEN_REPO_SERVER_ID: github
