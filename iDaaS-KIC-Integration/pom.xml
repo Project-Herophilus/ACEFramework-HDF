@@ -19,6 +19,12 @@
           <id>github</id>
           <name>iDaaS-KIC Packages</name>
           <url>https://maven.pkg.github.com/jayfray12/iDaaS-KIC</url>
+          <releases>
+              <enabled>true</enabled>
+          </releases>
+          <snapshots>
+              <enabled>true</enabled>
+          </snapshots>
         </repository>
     </distributionManagement>
 
