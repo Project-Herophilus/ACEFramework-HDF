@@ -71,7 +71,7 @@ jobs:
   #       MAVEN_REPO_SERVER_ID: github
   #       MAVEN_REPO_SERVER_USERNAME: jayfray12
   #       MAVEN_REPO_SERVER_PASSWORD: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
-  release:
+  maven-release:
     runs-on: ubuntu-latest
     # needs: deploy-upstream
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
@@ -104,4 +104,22 @@ jobs:
         # maven-args: "-Dmaven.deploy.skip=true"
         maven-repo-server-id: github
         m2-home-folder: '/tmp/.m2/repository'
+  git-release:
+    runs-on: ubuntu-latest
+    needs: maven-release
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"
+    steps:
+    - name: Checkout source
+      uses: actions/checkout@v2
+      with:
+        token: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
+    - name: Git Tag
+      run: |
+        export GIT_TAG=`git describe --abbrev=0 --tags`
+        echo "::set-env name=GIT_TAG::$GIT_TAG"
+    - uses: ncipollo/release-action@v1
+      with:
+        artifacts: "iDaaS-KIC-Integration/RedHat/target/*.jar,iDaaS-KIC-Integration/Upstream/target/*.jar"
+        token: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
+        tag: ${{ env.GIT_TAG }}
     
