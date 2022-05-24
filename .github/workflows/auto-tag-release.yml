@@ -1,0 +1,30 @@
+name: Releases
+
+on: 
+  push:
+    tags:
+    - '*'
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - uses: actions/checkout@v2
+    - name: Cache local Maven repository
+      uses: actions/cache@v3
+      with:
+        path: /tmp/.m2/repository
+        key: ${{ runner.os }}-maven
+        restore-keys: |
+          ${{ runner.os }}-maven
+    - name: Package
+      run: mvn -Dmaven.repo.local=/tmp/.m2/repository package -pl iDaaS-KIC-Integration
+      env:
+        GITHUB_TOKEN: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
+    - uses: ncipollo/release-action@v1
+      with:
+        artifacts: "iDaaS-KIC-Integration/target/*.jar"
+        token: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
