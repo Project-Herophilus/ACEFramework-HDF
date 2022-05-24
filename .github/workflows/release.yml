@@ -17,35 +17,33 @@ on:
         default: "false"
 
 jobs:
-  deploy-upstream:
-    runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, '[ci skip]')"
-    steps:
-    - name: Checkout source
-      uses: actions/checkout@v2
-      with:
-        token: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
-    - name: Cache local Maven repository
-      uses: actions/cache@v3
-      with:
-        path: /tmp/.m2/repository
-        key: ${{ runner.os }}-maven
-        restore-keys: |
-          ${{ runner.os }}-maven
-    - name: Deploy Upstreasm Artifacts
-      run: |
-        cp .github/workflows/settings.xml /tmp/settings.xml
-        sed -i "s/\${env.MAVEN_REPO_SERVER_ID}/$MAVEN_REPO_SERVER_ID/" /tmp/settings.xml
-        sed -i "s/\${env.MAVEN_REPO_SERVER_USERNAME}/$MAVEN_REPO_SERVER_USERNAME/" /tmp/settings.xml
-        sed -i "s/\${env.MAVEN_REPO_SERVER_PASSWORD}/$MAVEN_REPO_SERVER_PASSWORD/" /tmp/settings.xml
-        sudo mvn -X -s /tmp/settings.xml -gs /tmp/settings.xml -B deploy -pl iDaaS-KIC-Integration
-        echo "-----------------------DONE WITH ONE---------------------------------------"
-        sudo mvn -X -s /tmp/settings.xml -gs /tmp/settings.xml -B deploy -Predhat -pl iDaaS-KIC-Integration
-      env:
-        GITHUB_TOKEN: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
-        MAVEN_REPO_SERVER_ID: github
-        MAVEN_REPO_SERVER_USERNAME: jayfray12
-        MAVEN_REPO_SERVER_PASSWORD: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
+  # deploy-upstream:
+  #   runs-on: ubuntu-latest
+  #   if: "!contains(github.event.head_commit.message, '[ci skip]')"
+  #   steps:
+  #   - name: Checkout source
+  #     uses: actions/checkout@v2
+  #     with:
+  #       token: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
+  #   - name: Cache local Maven repository
+  #     uses: actions/cache@v3
+  #     with:
+  #       path: /tmp/.m2/repository
+  #       key: ${{ runner.os }}-maven
+  #       restore-keys: |
+  #         ${{ runner.os }}-maven
+  #   - name: Deploy Upstreasm Artifacts
+  #     run: |
+  #       cp .github/workflows/settings.xml /tmp/settings.xml
+  #       sed -i "s/\${env.MAVEN_REPO_SERVER_ID}/$MAVEN_REPO_SERVER_ID/" /tmp/settings.xml
+  #       sed -i "s/\${env.MAVEN_REPO_SERVER_USERNAME}/$MAVEN_REPO_SERVER_USERNAME/" /tmp/settings.xml
+  #       sed -i "s/\${env.MAVEN_REPO_SERVER_PASSWORD}/$MAVEN_REPO_SERVER_PASSWORD/" /tmp/settings.xml
+  #       sudo mvn -s /tmp/settings.xml -gs /tmp/settings.xml -B deploy -pl iDaaS-KIC-Integration
+  #     env:
+  #       GITHUB_TOKEN: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
+  #       MAVEN_REPO_SERVER_ID: github
+  #       MAVEN_REPO_SERVER_USERNAME: jayfray12
+  #       MAVEN_REPO_SERVER_PASSWORD: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
   # deploy-redhat:
   #   runs-on: ubuntu-latest
   #   if: "!contains(github.event.head_commit.message, '[ci skip]')"
@@ -103,7 +101,7 @@ jobs:
         version-minor: ${{ github.event.inputs.increment-minor }}
         git-release-bot-name: "jayfray12"
         maven-options: "-s /github/workspace/.github/workflows/settings.xml"
-        maven-args: "-X -Dmaven.deploy.skip=true"
+        # maven-args: "-Dmaven.deploy.skip=true"
         maven-repo-server-id: github
         m2-home-folder: '/tmp/.m2/repository'
     
