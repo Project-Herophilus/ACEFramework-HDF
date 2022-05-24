@@ -114,15 +114,25 @@ jobs:
       with:
         fetch-depth: 0
         token: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
+    # - name: Cache local Maven repository
+    #   uses: actions/cache@v3
+    #   with:
+    #     path: /tmp/.m2/repository
+    #     key: ${{ runner.os }}-maven
+    #     restore-keys: |
+    #       ${{ runner.os }}-maven
+    # - name: Package
+    #   run: mvn package -Dmaven.repo.local=/tmp/.m2/repository
     - name: Git Tag
+      id: tag
       run: |
-        git status
         export GIT_TAG=`git describe --abbrev=0 --tags`
         echo "TAG: $GIT_TAG"
-        echo "::set-env name=GIT_TAG::$GIT_TAG"
+        # echo "::set-env name=GIT_TAG::$GIT_TAG"
+        echo ::set-output name=git_tag::$(echo ${GIT_TAG})
     - uses: ncipollo/release-action@v1
       with:
         artifacts: "iDaaS-KIC-Integration/RedHat/target/*.jar,iDaaS-KIC-Integration/Upstream/target/*.jar"
         token: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
-        tag: ${{ env.GIT_TAG }}
+        tag: ${{ steps.tag.outputs.git_tag }}
     
