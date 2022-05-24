@@ -73,7 +73,7 @@ jobs:
   #       MAVEN_REPO_SERVER_PASSWORD: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
   release:
     runs-on: ubuntu-latest
-    needs: deploy-upstream
+    # needs: deploy-upstream
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
     - name: Checkout source
