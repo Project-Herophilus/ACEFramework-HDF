@@ -10,7 +10,7 @@
 
     <!--Internal Project Details-->
     <groupId>com.redhat.idaas.kic</groupId>
-    <artifactId>kic-integration</artifactId>
+    <artifactId>redhat-integration</artifactId>
     <version>3.0.23-SNAPSHOT</version>
 
 

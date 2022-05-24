@@ -10,7 +10,7 @@
 
     <!--Internal Project Details-->
     <groupId>io.connectedhealth_idaas.kic</groupId>
-    <artifactId>kic-integration</artifactId>
+    <artifactId>upstream-integration</artifactId>
     <version>3.0.23-SNAPSHOT</version>
 
     <properties>
