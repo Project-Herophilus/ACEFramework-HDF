@@ -5,13 +5,13 @@
     <parent>
         <groupId>io.connectedhealth_idaas.kic</groupId>
         <artifactId>integration</artifactId>
-        <version>3.0.24</version>
+        <version>3.0.25-SNAPSHOT</version>
     </parent>
 
     <!--Internal Project Details-->
     <groupId>com.redhat.idaas.kic</groupId>
     <artifactId>redhat-integration</artifactId>
-    <version>3.0.24</version>
+    <version>3.0.25-SNAPSHOT</version>
 
 
     <properties>
