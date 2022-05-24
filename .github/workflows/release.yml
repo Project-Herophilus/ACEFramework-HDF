@@ -62,7 +62,9 @@ jobs:
     - name: Git Tag
       id: tag
       run: |
+        git pull
         export GIT_TAG=`git describe --abbrev=0 --tags`
+        echo "TAG: $GIT_TAG"
         echo ::set-output name=git_tag::$(echo ${GIT_TAG})
   git-release:
     runs-on: ubuntu-latest
