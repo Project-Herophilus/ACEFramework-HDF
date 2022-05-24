@@ -5,13 +5,13 @@
     <parent>
         <groupId>io.connectedhealth_idaas.kic</groupId>
         <artifactId>integration-parent</artifactId>
-        <version>3.0.20-SNAPSHOT</version>
+        <version>3.0.21</version>
     </parent>
 
     <!--Internal Project Details-->
     <groupId>io.connectedhealth_idaas.kic</groupId>
     <artifactId>kic-integration</artifactId>
-    <version>3.0.20-SNAPSHOT</version>
+    <version>3.0.21</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

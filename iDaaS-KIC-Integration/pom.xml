@@ -4,14 +4,14 @@
     <!--Internal Project Details-->
     <groupId>io.connectedhealth_idaas.kic</groupId>
     <artifactId>integration-parent</artifactId>
-    <version>3.0.20-SNAPSHOT</version>
+    <version>3.0.21</version>
     <packaging>pom</packaging>
     
       <scm>
       <connection>scm:git:https://github.com/jayfray12/iDaaS-KIC.git</connection>
       <url>https://github.com/jayfray12/iDaaS-KIC</url>
       <developerConnection>scm:git:https://github.com/jayfray12/iDaaS-KIC</developerConnection>
-      <tag>v1.0.0</tag>
+      <tag>v3.0.21</tag>
     </scm>
     
     <distributionManagement>
