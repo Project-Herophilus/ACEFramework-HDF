@@ -71,51 +71,54 @@ jobs:
   #       MAVEN_REPO_SERVER_ID: github
   #       MAVEN_REPO_SERVER_USERNAME: jayfray12
   #       MAVEN_REPO_SERVER_PASSWORD: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
-  maven-release:
-    runs-on: ubuntu-latest
-    # needs: deploy-upstream
-    if: "!contains(github.event.head_commit.message, '[ci skip]')"
-    steps:
-    - name: Checkout source
-      uses: actions/checkout@v2
-      with:
-        token: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
-    - name: Cache local Maven repository
-      uses: actions/cache@v3
-      with:
-        path: /tmp/.m2/repository
-        key: ${{ runner.os }}-maven
-        restore-keys: |
-          ${{ runner.os }}-maven
-    - name: Java Maven release
-      uses: qcastel/github-actions-maven-release@v1.12.16
-      env:
-        JAVA_HOME: /usr/lib/jvm/java-11-openjdk/
-        MAVEN_REPO_SERVER_ID: github
-        MAVEN_REPO_SERVER_USERNAME: jayfray12
-        MAVEN_REPO_SERVER_PASSWORD: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
-      with:
-        access-token: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
-        release-branch-name: ${{ github.event.inputs.branch }}
-        version-major: ${{ github.event.inputs.increment-major }}
-        version-minor: ${{ github.event.inputs.increment-minor }}
-        git-release-bot-name: "jayfray12"
-        maven-options: "-s /github/workspace/.github/workflows/settings.xml"
-        # maven-args: "-Dmaven.deploy.skip=true"
-        maven-repo-server-id: github
-        m2-home-folder: '/tmp/.m2/repository'
+  # maven-release:
+  #   runs-on: ubuntu-latest
+  #   # needs: deploy-upstream
+  #   if: "!contains(github.event.head_commit.message, '[ci skip]')"
+  #   steps:
+  #   - name: Checkout source
+  #     uses: actions/checkout@v2
+  #     with:
+  #       token: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
+  #   - name: Cache local Maven repository
+  #     uses: actions/cache@v3
+  #     with:
+  #       path: /tmp/.m2/repository
+  #       key: ${{ runner.os }}-maven
+  #       restore-keys: |
+  #         ${{ runner.os }}-maven
+  #   - name: Java Maven release
+  #     uses: qcastel/github-actions-maven-release@v1.12.16
+  #     env:
+  #       JAVA_HOME: /usr/lib/jvm/java-11-openjdk/
+  #       MAVEN_REPO_SERVER_ID: github
+  #       MAVEN_REPO_SERVER_USERNAME: jayfray12
+  #       MAVEN_REPO_SERVER_PASSWORD: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
+  #     with:
+  #       access-token: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
+  #       release-branch-name: ${{ github.event.inputs.branch }}
+  #       version-major: ${{ github.event.inputs.increment-major }}
+  #       version-minor: ${{ github.event.inputs.increment-minor }}
+  #       git-release-bot-name: "jayfray12"
+  #       maven-options: "-s /github/workspace/.github/workflows/settings.xml"
+  #       # maven-args: "-Dmaven.deploy.skip=true"
+  #       maven-repo-server-id: github
+  #       m2-home-folder: '/tmp/.m2/repository'
   git-release:
     runs-on: ubuntu-latest
-    needs: maven-release
+    # needs: maven-release
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
     - name: Checkout source
       uses: actions/checkout@v2
       with:
+        fetch-depth: 0
         token: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
     - name: Git Tag
       run: |
+        git status
         export GIT_TAG=`git describe --abbrev=0 --tags`
+        echo "TAG: $GIT_TAG"
         echo "::set-env name=GIT_TAG::$GIT_TAG"
     - uses: ncipollo/release-action@v1
       with:
