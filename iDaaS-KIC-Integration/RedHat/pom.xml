@@ -5,13 +5,13 @@
     <parent>
         <groupId>io.connectedhealth_idaas.kic</groupId>
         <artifactId>integration</artifactId>
-        <version>3.0.24-SNAPSHOT</version>
+        <version>3.0.6-SNAPSHOT</version>
     </parent>
 
     <!--Internal Project Details-->
     <groupId>com.redhat.idaas.kic</groupId>
     <artifactId>redhat-integration</artifactId>
-    <version>3.0.24-SNAPSHOT</version>
+    <version>3.0.6-SNAPSHOT</version>
 
 
     <properties>
@@ -31,7 +31,7 @@
         <repository>
           <id>github</id>
           <name>iDaaS-KIC Packages</name>
-          <url>https://maven.pkg.github.com/jayfray12/iDaaS-KIC</url>
+          <url>https://maven.pkg.github.com/Project-Herophilus/iDaaS-KIC</url>
           <releases>
               <enabled>true</enabled>
           </releases>
