@@ -1,8 +1,8 @@
 # Build stage
 FROM maven:3.6.0-jdk-11-slim AS build
 #COPY .mvn .mvn                                                                                              
-#COPY pom.xml .                                               
-#COPY src src   
+COPY pom.xml .                                               
+COPY src src   
 RUN mvn -Dcommunity clean install
 COPY target/*.jar /app/target/
 
