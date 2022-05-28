@@ -89,4 +89,3 @@ jobs:
         artifacts: "iDaaS-KIC-Integration/RedHat/target/*.jar,iDaaS-KIC-Integration/Upstream/target/*.jar"
         token: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
         tag: ${{ needs.get-tag.outputs.git_tag }}
-    
