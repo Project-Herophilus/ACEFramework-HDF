@@ -17,9 +17,7 @@ xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
-            <snapshots>
-              <enabled>true</enabled>
-            </snapshots>
         </profile>
     </profiles>
+    <localRepository>/tmp/.m2/repository</localRepository>
 </settings>

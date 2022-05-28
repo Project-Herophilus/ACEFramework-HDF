@@ -17,15 +17,21 @@ on:
         default: "false"
 
 jobs:
-  release:
+  maven-release:
     runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
     - name: Checkout source
       uses: actions/checkout@v2
       with:
         token: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
-    - name: Java Maven release Upstream
+    - name: Cache local Maven repository
+      uses: actions/cache@v3
+      with:
+        path: /tmp/.m2/repository
+        key: ${{ runner.os }}-maven
+        restore-keys: |
+          ${{ runner.os }}-maven
+    - name: Java Maven release
       uses: qcastel/github-actions-maven-release@v1.12.16
       env:
         JAVA_HOME: /usr/lib/jvm/java-11-openjdk/
@@ -38,13 +44,48 @@ jobs:
         version-major: ${{ github.event.inputs.increment-major }}
         version-minor: ${{ github.event.inputs.increment-minor }}
         git-release-bot-name: "idaas-bot"
-        maven-options: "-s /github/workspace/.github/workflows/settings.xml"
-        maven-args: "-Dmaven.deploy.skip=true"
+        maven-options: "-s /github/workspace/.github/workflows/settings.xml -Dmaven.repo.local=/tmp/.m2/repository"
+        maven-args: "-Dmaven.repo.local=/tmp/.m2/repository"
         maven-repo-server-id: github
-    - name: Deploy Red Hat Artifacts
-      run: sudo mvn -s .github/workflows/settings.xml -B deploy -pl iDaaS-KIC-Integration
-      env:
-        GITHUB_TOKEN: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
-        MAVEN_REPO_SERVER_ID: github
-        MAVEN_REPO_SERVER_USERNAME: idaas-bot
-        MAVEN_REPO_SERVER_PASSWORD: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
+        m2-home-folder: '/tmp/.m2/repository'
+  get-tag:
+    runs-on: ubuntu-latest
+    needs: maven-release
+    outputs:
+      git_tag: ${{ steps.tag.outputs.git_tag }}
+    steps:
+    - name: Checkout source
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
+    - name: Git Tag
+      id: tag
+      run: |
+        git pull
+        export GIT_TAG=`git describe --abbrev=0 --tags`
+        echo "TAG: $GIT_TAG"
+        echo ::set-output name=git_tag::$(echo ${GIT_TAG})
+  git-release:
+    runs-on: ubuntu-latest
+    needs: get-tag
+    steps:
+    - name: Checkout source
+      uses: actions/checkout@v2
+      with:
+        ref: ${{ needs.get-tag.outputs.git_tag }}
+        token: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
+    - name: Cache local Maven repository
+      uses: actions/cache@v3
+      with:
+        path: /tmp/.m2/repository
+        key: ${{ runner.os }}-maven
+        restore-keys: |
+          ${{ runner.os }}-maven
+    - name: Package
+      run: mvn package -Dmaven.repo.local=/tmp/.m2/repository
+    - uses: ncipollo/release-action@v1
+      with:
+        artifacts: "iDaaS-KIC-Integration/RedHat/target/*.jar,iDaaS-KIC-Integration/Upstream/target/*.jar"
+        token: ${{ secrets.HEROPHILUS_ACCESS_TOKEN }}
+        tag: ${{ needs.get-tag.outputs.git_tag }}
